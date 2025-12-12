@@ -26,6 +26,8 @@ from kvpress import (
     FinchPress,
     KeyDiffPress,
     KnormPress,
+    KVPressSquaredPress,
+    KVSummaryPress,
     KVzipPress,
     ObservedAttentionPress,
     PyramidKVPress,
@@ -81,7 +83,16 @@ PRESS_REGISTRY = {
     "expected_attention": ExpectedAttentionPress(),
     "finch": FinchPress(),
     "keydiff": KeyDiffPress(),
+    "keydiff_latency": KeyDiffPress(
+        measure_decoding_latency=True, 
+        num_decoding_tokens=127,
+        decoding_prompt="List 3 specific questions about this document. Only output the questions, do not provide answers. 1. ",
+    ),
+    "kvsummary": KVSummaryPress(),
     "kvzip": KVzipPress(),
+    "kvpress_squared": KVPressSquaredPress(),  # default: inner compression_ratio=0.8 -> top 20%
+    "kvpress_squared_top10": KVPressSquaredPress(inner_press=KeyDiffPress(compression_ratio=0.9)),  # top 10%
+    "kvpress_squared_top30": KVPressSquaredPress(inner_press=KeyDiffPress(compression_ratio=0.7)),  # top 30%
     "knorm": KnormPress(),
     "observed_attention": ObservedAttentionPress(),
     "pyramidkv": PyramidKVPress(),
