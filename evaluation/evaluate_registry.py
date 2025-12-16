@@ -83,11 +83,6 @@ PRESS_REGISTRY = {
     "expected_attention": ExpectedAttentionPress(),
     "finch": FinchPress(),
     "keydiff": KeyDiffPress(),
-    "keydiff_latency": KeyDiffPress(
-        measure_decoding_latency=True, 
-        num_decoding_tokens=127,
-        decoding_prompt="List 3 specific questions about this document. Only output the questions, do not provide answers. 1. ",
-    ),
     "kvsummary": KVSummaryPress(),
     "kvzip": KVzipPress(),
     "kvsquared": KVSquaredPress(),  # default: inner compression_ratio=0.5 -> top 50%
