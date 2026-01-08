@@ -4,14 +4,14 @@
 output_dir: "./results"
 
 model: "meta-llama/Meta-Llama-3.1-8B-Instruct"
-dataset: "ruler"                                  # see DATASET_REGISTRY in evaluate_registry.py
-data_dir: "4096"                                # Subdirectory of the dataset (if applicable) else leave "null"
+dataset: "longbench"                                  # see DATASET_REGISTRY in evaluate_registry.py
+data_dir: "hotpotqa"                                # Subdirectory of the dataset (if applicable) else leave "null"
 
 press_name: "kvsquared"                                # see PRESS_REGISTRY in evaluate_registry.py
 compression_ratio: 0.9                             # Compression ratio for the press (0.0 to 1.0)
 key_channel_compression_ratio: null                # For ThinKPress and ComposedPress (0.0 to 1.0)
 
-fraction: 0.01                                     # Fraction of dataset to evaluate (0.0 to 1.0), for quick testing
+fraction: 0.1                                     # Fraction of dataset to evaluate (0.0 to 1.0), for quick testing
 max_new_tokens: null                              # Maximum new tokens to generate (null = use dataset default)
 max_context_length: null                          # Maximum context length (null = use model maximum)
 query_aware: false                                # Whether to include question in context for query-aware compression

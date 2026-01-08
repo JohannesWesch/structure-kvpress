@@ -105,9 +105,17 @@ class KVSquaredPress(KVzipPress):
         ctx_ids = self._context_ids[:, self.prefix_length :].to("cpu")
         chunked_input_ids = self._chunk_fn(ctx_ids, chunk_size=4096)
 
+        # Print the full input text
+        full_input_text = tokenizer.decode(self._context_ids[0].tolist(), skip_special_tokens=False)
+        print("=" * 80)
+        print("[KV²] FULL INPUT TEXT:")
+        print("=" * 80)
+        print(full_input_text)
+        print("=" * 80)
+
         # Process each chunk
         self.start_idx = self.prefix_length
-        for prefill_ids in chunked_input_ids:
+        for chunk_idx, prefill_ids in enumerate(chunked_input_ids):
             chunk_start = self.start_idx
             chunk_end = chunk_start + prefill_ids.shape[1]
             self.end_idx = chunk_end
@@ -119,6 +127,15 @@ class KVSquaredPress(KVzipPress):
             # Stage 2: Pass only selected tokens (no prompt/suffix needed)
             pos = selected_positions.to(self._context_ids.device)
             selected_ids = self._context_ids.index_select(1, pos)
+
+            # Print the selected tokens for reconstruction
+            selected_tokens_text = tokenizer.decode(selected_ids[0].tolist(), skip_special_tokens=False)
+            selected_tokens_list = [tokenizer.decode([tid]) for tid in selected_ids[0].tolist()]
+            print(f"\n[KV²] CHUNK {chunk_idx} [{chunk_start}:{chunk_end}] - Selected {len(selected_positions)} tokens for reconstruction:")
+            print(f"  Positions: {selected_positions.tolist()}")
+            print(f"  Decoded text: {selected_tokens_text}")
+            print(f"  Individual tokens: {selected_tokens_list}")
+            print("-" * 80)
 
             logger.debug(f"[KV²] Chunk [{chunk_start}:{chunk_end}] -> {len(selected_positions)} queries")
 
