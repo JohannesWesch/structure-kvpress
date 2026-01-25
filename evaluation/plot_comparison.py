@@ -22,18 +22,31 @@ DATA = {
         0.5: 93,
         0.75: 93.9,
         0.88: 89.8,
+
     },
-    
-    #"KVSquared + KeyDiff top 0.2": {
-    #    0.5: 90.9,
-    #    0.75: 87.6,
-    #    0.88: 79.4,
-    #},
     "KVSquared + KeyDiff top 0.02": {
         0.5: 86.2, # 88.7
         0.75: 79.3, # 76.3
         0.88: 72.8, # 70.3
     },
+    "KeyDiff": {
+        0.25: 91.6,
+        0.5: 85.5,
+        0.75: 72.9,
+        0.88: 63.3,
+        0.98: 32.22 #10% of RULER dataset
+    },
+    "RandomPress": {
+        0.25: 61.9,
+        0.5: 6.88,
+        0.75: 0.56,
+        0.88: 0.18,
+    },
+    #"KVSquared + KeyDiff top 0.2": {
+    #    0.5: 90.9,
+    #    0.75: 87.6,
+    #    0.88: 79.4,
+    #},
     #"KVSquared + Random top 0.5": {
     #    0.5: 93,
     #    0.75: 93.7,
@@ -44,18 +57,6 @@ DATA = {
     #    0.75: 73.7,
     #    0.88: 55.1,
     #},
-    "KeyDiff": {
-        0.25: 91.6,
-        0.5: 85.5,
-        0.75: 72.9,
-        0.88: 63.3,
-    },
-    "RandomPress": {
-        0.25: 61.9,
-        0.5: 6.88,
-        0.75: 0.56,
-        0.88: 0.18,
-    },
 }
 
 # =============================================================================
@@ -66,7 +67,7 @@ TITLE = "KV² Compression Comparison (chunk_size=2048)"
 XLABEL = "Compression Ratio"
 YLABEL = "Score (%)"
 FIGSIZE = (10, 6)
-OUTPUT_FILE = "kv_comparison.png"  # Set to None to only display, not save
+OUTPUT_FILE = "RULER.png"  # Set to None to only display, not save
 
 # Colors and markers for each method (matching plot_chunk_size.py where applicable)
 # Order: KVzip=blue, KVSquared+KeyDiff 0.5=red, 0.02=green, KeyDiff=black, RandomPress=black
