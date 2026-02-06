@@ -48,7 +48,7 @@ class KVSquaredPress(KVzipPress):
 
     chunk_size: int = 16384
     inner_press: ScorerPress | KVSquaredPress = field(default_factory=lambda: KeyDiffPress())
-    top_ratio: float = 0.02
+    top_ratio: float = 0.1
 
     def __post_init__(self):
         assert 0 <= self.compression_ratio < 1, "compression_ratio must be in [0, 1)"
@@ -56,10 +56,6 @@ class KVSquaredPress(KVzipPress):
             "inner_press must have .score() or .compute_chunk_scores() method"
         assert 0 < self.top_ratio <= 1, "top_ratio must be in (0, 1]"
         self._reset_internal_parameters()
-
-    def _get_language_model(self, model: PreTrainedModel):
-        """Get the underlying language model, handling VLM wrappers."""
-        return model.model.language_model if hasattr(model.model, "language_model") else model.model
 
     def _compute_chunk_scores(self, model: PreTrainedModel, chunk_start: int, chunk_end: int) -> torch.Tensor:
         """
@@ -74,9 +70,8 @@ class KVSquaredPress(KVzipPress):
                 self.prefix_length, self.context_length
             )
 
-        language_model = self._get_language_model(model)
         all_scores = []
-        for layer_idx, layer in enumerate(language_model.layers):
+        for layer_idx, layer in enumerate(model.model.layers):
             keys, values = extract_keys_and_values(self._cache, layer_idx)
             scores = self.inner_press.score(
                 module=layer.self_attn, hidden_states=None,
@@ -113,9 +108,8 @@ class KVSquaredPress(KVzipPress):
 
     def _with_scoring_hooks(self, model: PreTrainedModel, fn):
         """Execute fn with forward hooks registered for importance scoring."""
-        language_model = self._get_language_model(model)
         hooks = [layer.self_attn.register_forward_hook(self.forward_hook, with_kwargs=True)
-                 for layer in language_model.layers]
+                 for layer in model.model.layers]
         try:
             return fn()
         finally:
