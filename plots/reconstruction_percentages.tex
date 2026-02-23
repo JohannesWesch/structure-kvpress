@@ -1,0 +1,431 @@
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{xcolor}
+
+% Page setup for wide table
+\geometry{
+    a4paper,
+    landscape,
+    margin=1.0cm
+}
+
+% Custom column type for better alignment
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{table}[htbp]
+\centering
+\caption{RULER-4k Results with different Reconstruction Percentages}
+\label{tab:ruler_results}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cc|cccccccc|cc|c|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{2}{c|}{\textbf{Aggregation}}
+    & \multicolumn{8}{c|}{\textbf{Retrieval}} 
+    & \multicolumn{2}{c|}{\textbf{QA}}
+    & \textbf{Multi-hop} 
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-11} \cmidrule(lr){12-13} \cmidrule(lr){14-14}
+    & cwe & fwe 
+    & niah\_mk\_1 & niah\_mk\_2 & niah\_mk\_3 
+    & niah\_mq & niah\_mv 
+    & niah\_s\_1 & niah\_s\_2 & niah\_s\_3 
+    & qa\_1 & qa\_2 
+    & vt 
+    & \\
+\midrule
+
+%% ============================================================
+%% QWEN-8B
+%% ============================================================
+\multicolumn{15}{c}{\textbf{Qwen3-8B}} \\
+\midrule
+
+Full 
+    & 99.53 & 93.33 
+    & 100 & 100 & 100 
+    & 100 & 100 
+    & 100 & 100 & 100 
+    & 80.85 & 56.82 
+    & 100 
+    & 94.66 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KV²(KeyDiff 1\%) 
+    & 5.35 & 52.67 
+    & 48.15 & \textbf{0.0} & \textbf{0.0}
+    & \textbf{77.63} & 74.56 
+    & 96.97 & 86.36 & \textbf{100.0}
+    & 29.79 & \textbf{27.27}
+    & 4.39 
+    & 46.40 \\
+    
+KV²(KeyDiff 2\%) 
+    & 7.44 & 59.33 
+    & \textbf{59.26} & \textbf{0.0} & \textbf{0.0} 
+    & 77.19 & 84.21 
+    & \textbf{100.0} & \textbf{89.39} & 92.86 
+    & 29.79 & 25.0 
+    & 13.17 
+    & 49.05 \\
+
+KV²(KeyDiff 5\%) 
+    & 8.37 & 72.67 
+    & 55.56 & \textbf{0.0} & \textbf{0.0}
+    & 69.3 & \textbf{89.47} 
+    & \textbf{100.0} & 81.82 & 83.33
+    & 27.66 & 18.18
+    & 43.41 
+    & 49.98 \\
+
+KV²(KeyDiff 10\%) 
+    & \textbf{16.98} & 72.67 
+    & 55.56 & \textbf{0.0} & \textbf{0.0}
+    & 63.16 & 78.95 
+    & \textbf{100.0} & 54.55 & 97.62
+    & 29.79 & 13.64
+    & 99.02 
+    & \textbf{52.46} \\
+
+KV²(KeyDiff 25\%) 
+    & 6.51 & \textbf{75.33} 
+    & 57.41 & \textbf{0.0} & \textbf{0.0}
+    & 64.91 & 60.09 
+    & \textbf{100.0} & 53.03 & 85.71
+    & \textbf{34.04} & 11.36
+    & \textbf{100.0} 
+    & 49.88 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KV²(KeyDiff 5\%) 
+    & 23.95 & 85.33 
+    & \textbf{87.04} & 0.0 & 0.0 
+    & \textbf{95.61} & \textbf{99.56} 
+    & \textbf{100.0} & \textbf{98.48} & \textbf{100} 
+    & 44.68 & 22.73 
+    & 97.07 
+    & 65.73 \\
+
+KV²(KeyDiff 10\%) 
+    & 43.49 & \textbf{88.0} 
+    & 85.19 & 0.0 & 0.0
+    & 89.04 & 97.37 
+    & \textbf{100.0} & 93.94 & \textbf{100.0}
+    & 40.43 & 22.73
+    & \textbf{100.0} 
+    & 66.17 \\
+
+KV²(KeyDiff 25\%) 
+    & \textbf{67.21} & 83.33 
+    & 81.48 & 8.11 & 2.17
+    & 92.98 & 93.86 
+    & \textbf{100.0} & 80.3 & 97.62
+    & \textbf{55.32} & 22.73
+    & \textbf{100.0} 
+    & \textbf{68.09} \\
+
+KV²(KeyDiff 50\%) 
+    & 37.91 & 82.0 
+    & 68.52 & 27.03 & 6.52
+    & 93.86 & 74.12 
+    & \textbf{100.0} & 74.24 & 95.24
+    & 48.94 & \textbf{31.82}
+    & \textbf{100.0} 
+    & 64.63 \\
+
+KV²(KeyDiff 75\%) 
+    & 15.58 & 78.67 
+    & 59.26 & \textbf{56.76} & \textbf{21.74}
+    & 60.09 & 39.91 
+    & \textbf{100.0} & 53.03 & 61.9
+    & 42.55 & 20.45
+    & \textbf{100.0} 
+    & 54.61 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 10\%}} \\
+\midrule
+
+KV²(KeyDiff 10\%) 
+    & 79.53 & \textbf{91.33}
+    & \textbf{94.44} & 8.11 & 4.35
+    & 98.25 & \textbf{100.0} 
+    & \textbf{100.0} & \textbf{100.0} & 97.62 
+    & 57.45 & 29.55 
+    & \textbf{100.0} 
+    & 73.89 \\
+
+KV²(KeyDiff 50\%) 
+    & \textbf{94.19} & 90.0 
+    & 92.59 & 78.38 & 17.39
+    & 98.68 & 94.74 
+    & \textbf{100.0} & 96.97 & \textbf{100.0}
+    & 80.85 & 45.45
+    & \textbf{100.0} 
+    & 83.79 \\
+
+KV²(KeyDiff 75\%) 
+    & 85.58 & 88.0 
+    & 92.59 & \textbf{97.3} & 50.0
+    & \textbf{99.12} & 88.16 
+    & \textbf{100.0} & \textbf{100.0} & 97.62
+    & \textbf{85.11} & \textbf{47.73}
+    & \textbf{100.0} 
+    & \textbf{87.02} \\
+
+KV²(KeyDiff 100\%) 
+    & 66.05 & 87.33 
+    & 88.89 & 94.59 & \textbf{89.13}
+    & 91.23 & 82.89 
+    & \textbf{100.0} & 92.42 & \textbf{100.0}
+    & 82.98 & \textbf{47.73}
+    & \textbf{100.0} 
+    & 86.40 \\
+
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+\newpage
+
+\begin{table}[htbp]
+\centering
+\caption{RULER-4k Results with different Reconstruction Percentages}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cc|cccccccc|cc|c|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{2}{c|}{\textbf{Aggregation}}
+    & \multicolumn{8}{c|}{\textbf{Retrieval}} 
+    & \multicolumn{2}{c|}{\textbf{QA}}
+    & \textbf{Multi-hop} 
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-11} \cmidrule(lr){12-13} \cmidrule(lr){14-14}
+    & cwe & fwe 
+    & niah\_mk\_1 & niah\_mk\_2 & niah\_mk\_3 
+    & niah\_mq & niah\_mv 
+    & niah\_s\_1 & niah\_s\_2 & niah\_s\_3 
+    & qa\_1 & qa\_2 
+    & vt 
+    & \\
+\midrule
+
+%% ============================================================
+%% LLAMA-3-8B-INSTRUCT
+%% ============================================================
+\multicolumn{15}{c}{\textbf{Llama-3.1-8B-Instruct}} \\
+\midrule
+
+Full 
+    & 99.07 & 95.33 
+    & 100 & 100 & 100
+    & 100 & 100
+    & 100 & 100 & 100
+    & 87.23 & 61.36 
+    & 100 
+    & 95.61 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KV²(KeyDiff 1\%) 
+    & 13.02 & 62.0 
+    & 51.85 & 0.0 & 0.0
+    & 68.42 & 66.23 
+    & \textbf{100.0} & 93.94 & 50.0
+    & 17.02 & 18.18
+    & 32.2 
+    & 44.07 \\
+    
+KV²(KeyDiff 2\%) 
+    & 12.56 & 73.33 
+    & 72.22 & 0.0 & 0.0 
+    & 92.54 & 93.86 
+    & \textbf{100.0} & 96.97 & 85.71 
+    & 21.28 & 15.91 
+    & 29.27
+    & 53.36 \\
+
+KV²(KeyDiff 5\%) 
+    & \textbf{15.81} & 71.33 
+    & 83.33 & 0.0 & 0.0
+    & \textbf{98.25} & \textbf{98.68} 
+    & \textbf{100.0} & \textbf{98.48} & \textbf{100.0}
+    & 21.28 & 13.64
+    & 91.71 
+    & 60.96 \\
+
+KV²(KeyDiff 10\%) 
+    & 10.23 & \textbf{82.67} 
+    & \textbf{98.15} & 2.7 & 0.0
+    & 97.81 & 89.04 
+    & \textbf{100.0} & 93.94 & 97.62
+    & 25.53 & \textbf{22.73}
+    & \textbf{95.61} 
+    & \textbf{62.77} \\
+
+%KV²(KeyDiff 20\%) 
+%    & 5.35 & 80.67 
+%    & 96.3 & \textbf{5.41} & 0.0
+%    & 92.98 & 73.68 
+%    & \textbf{100.0} & \textbf{98.48} & \textbf{100.0}
+%    & \textbf{27.66} & 20.45
+%    & 92.2 
+%    & 61.01 \\
+
+KV²(KeyDiff 25\%) 
+    & 3.49 & 79.33 
+    & 94.44 & 8.11 & \textbf{2.17}
+    & 88.6 & 61.4 
+    & \textbf{100.0} & \textbf{98.48} & \textbf{100.0}
+    & \textbf{31.91} & \textbf{22.73}
+    & 87.8 
+    & 59.88 \\
+
+KV²(KeyDiff 50\%) 
+    & 0.7 & 64.0 
+    & 33.33 & \textbf{18.92} & 0.0
+    & 18.42 & 12.72
+    & \textbf{100.0} & 48.48 & 35.71
+    & 23.4 & 18.18
+    & 90.73 
+    & 35.74 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KV²(KeyDiff 2\%) 
+    & 31.63 & 82.0 
+    & 90.74 & 0.0 & 0.0
+    & 96.93 & 98.68 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & 23.4 & 25.0
+    & 84.88 
+    & 64.10 \\
+
+KV²(KeyDiff 5\%) 
+    & 34.88 & 84.67 
+    & 90.74 & 2.7 & 0.0 
+    & 98.68 & 99.56 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & 34.04 & 29.55 
+    & \textbf{99.02} 
+    & 67.22 \\
+
+KV²(KeyDiff 10\%) 
+    & 43.02 & 86.0 
+    & 98.15 & 2.7 & 2.17
+    & \textbf{99.56} & \textbf{100.0} 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & 44.68 & 27.27
+    & 98.54 
+    & 69.39 \\
+
+KV²(KeyDiff 25\%) 
+    & \textbf{43.26} & \textbf{89.33} 
+    & \textbf{100.0} & 24.32 & 4.35
+    & \textbf{99.56} & 94.3 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & \textbf{53.19} & 36.36
+    & 98.54 
+    & 72.55 \\
+
+KV²(KeyDiff 50\%) 
+    & 29.3 & 86.0 
+    & 98.15 & 72.97 & 6.52
+    & 96.93 & 78.51 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & 46.81 & 34.09
+    & 98.05 
+    & \textbf{72.87} \\
+
+KV²(KeyDiff 75\%) 
+    & 18.14 & 81.33 
+    & 88.89 & \textbf{81.08} & \textbf{17.39}
+    & 81.58 & 57.89 
+    & \textbf{100.0} & 98.48 & 97.62
+    & 44.68 & 31.82
+    & 97.56 
+    & 68.96 \\
+
+KV²(KeyDiff 100\%) 
+    & 5.35 & 58.0 
+    & 77.78 & 70.27 & 8.7
+    & 76.32 & 47.37 
+    & \textbf{100.0} & 98.48 & 95.24
+    & 40.43 & \textbf{40.91}
+    & 98.05 
+    & 62.84 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 10\%}} \\
+\midrule
+
+KV²(KeyDiff 50\%) 
+    & \textbf{82.56} & 90.67 
+    & \textbf{100.0} & \textbf{97.3} & 17.39
+    & \textbf{100.0} & \textbf{98.25} 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & 76.6 & 47.73
+    & \textbf{100.0} 
+    & 85.42 \\
+
+KV²(KeyDiff 75\%) 
+    & 80.23 & \textbf{92.67} 
+    & \textbf{100.0} & \textbf{97.3} & 52.17
+    & 99.56 & 95.18 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & 76.6 & \textbf{52.27}
+    & 99.51 
+    & 88.11 \\
+
+KV²(KeyDiff 90\%) 
+    & 74.19 & 90.67 
+    & 98.15 & \textbf{97.3} & 78.26
+    & 99.12 & 92.98 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & \textbf{82.98} & \textbf{52.27}
+    & \textbf{100.0} 
+    & 89.69 \\
+
+KV²(KeyDiff 100\%) 
+    & 62.79 & 89.33 
+    & \textbf{100.0} & \textbf{97.3} & \textbf{95.65}
+    & 99.12 & 92.54 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0}
+    & 78.72 & \textbf{52.27}
+    & 98.54 
+    & \textbf{89.71} \\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\end{document}

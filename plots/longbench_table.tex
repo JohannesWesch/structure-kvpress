@@ -1,0 +1,290 @@
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{xcolor}
+
+% Page setup for wide table
+\geometry{
+    a4paper,
+    landscape,
+    margin=0.8cm
+}
+
+% Custom column type for better alignment
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{table}[htbp]
+\centering
+\caption{LongBench benchmark results with 2\% and 5\% KV cache sizes.}
+\label{tab:longbench_results}
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|ccc|ccc|ccc|ccc|cc|cc|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{3}{c|}{\textbf{Single-Doc QA}}
+    & \multicolumn{3}{c|}{\textbf{Multi-Doc QA}} 
+    & \multicolumn{3}{c|}{\textbf{Summarization}}
+    & \multicolumn{3}{c|}{\textbf{Few-shot}}
+    & \multicolumn{2}{c|}{\textbf{Synthetic}}
+    & \multicolumn{2}{c|}{\textbf{Code}}
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13} \cmidrule(lr){14-15} \cmidrule(lr){16-17}
+    & NrtvQA & Qasper & MF-en 
+    & HotpotQA & 2WikiMQA & Musique 
+    & GovRep & QMSum & MultiN
+    & TREC & TriviaQA & SAMSum
+    & PCount & PRE
+    & Lcc & RB-P
+    & \\
+\midrule
+
+%% ============================================================
+%% Qwen3-8B
+%% ============================================================
+\multicolumn{18}{c}{\textbf{Qwen3-8B}} \\
+\midrule
+
+Full 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{18}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.2) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{18}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.5) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+
+%% ============================================================
+%% Llama-3-8B-Instruct
+%% ============================================================
+\multicolumn{18}{c}{\textbf{Llama-3-8B-Instruct}} \\
+\midrule
+
+Full 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{18}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.2) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(5 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{18}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.5) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations)  
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(5 Iterations)  
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+%% ============================================================
+%% Column to data_dir mapping for evaluation:
+%% ============================================================
+%% NrtvQA   -> narrativeqa
+%% Qasper   -> qasper
+%% MF-en    -> multifieldqa_en
+%% HotpotQA -> hotpotqa
+%% 2WikiMQA -> 2wikimqa
+%% Musique  -> musique
+%% GovRep   -> gov_report
+%% QMSum    -> qmsum
+%% MultiN   -> multi_news
+%% TREC     -> trec
+%% TriviaQA -> triviaqa
+%% SAMSum   -> samsum
+%% PCount   -> passage_count
+%% PRE      -> passage_retrieval_en
+%% Lcc      -> lcc
+%% RB-P     -> repobench-p
+%% ============================================================
+
+\end{document}

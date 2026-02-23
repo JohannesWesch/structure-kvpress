@@ -1,0 +1,180 @@
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{xcolor}
+
+% Page setup
+\geometry{
+    a4paper,
+    margin=1.5cm
+}
+
+% Custom column type for better alignment
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{table}[htbp]
+\centering
+\caption{LongBench-v2 benchmark results. Length categories: Short (0--32k words), Medium (32k--128k words), Long (128k--2M words). Difficulty categories: Easy, Hard.}
+\label{tab:longbenchv2_results}
+\small
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|ccc|cc|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{3}{c|}{\textbf{Length}}
+    & \multicolumn{2}{c|}{\textbf{Difficulty}}
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-6}
+    & Short & Medium & Long
+    & Easy & Hard
+    & \\
+\midrule
+
+%% ============================================================
+%% Qwen3-8B
+%% ============================================================
+\multicolumn{7}{c}{\textbf{Qwen3-8B}} \\
+\midrule
+
+Full 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{7}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.2) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{7}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.5) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+
+%% ============================================================
+%% Llama-3.1-8B-Instruct
+%% ============================================================
+\multicolumn{7}{c}{\textbf{Llama-3.1-8B-Instruct}} \\
+\midrule
+
+Full 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{7}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.2) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(5 Iterations) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\midrule
+\multicolumn{7}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVzip 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared(KeyDiff 0.5) 
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(2 Iterations)  
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+KVsquared+(5 Iterations)  
+    & 0.00 & 0.00 & 0.00
+    & 0.00 & 0.00
+    & 0.00 \\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\end{document}

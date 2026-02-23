@@ -1,0 +1,440 @@
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{xcolor}
+
+% Page setup for wide table
+\geometry{
+    a4paper,
+    landscape,
+    margin=1.0cm
+}
+
+% Custom column type for better alignment
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{table}[htbp]
+\centering
+\caption{RULER-4K Benchmark Results on Qwen-8B with 2\%, 5\%, and 10\% KV Cache Sizes}
+\label{tab:ruler_results}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cc|cccccccc|cc|c|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{2}{c|}{\textbf{Aggregation}}
+    & \multicolumn{8}{c|}{\textbf{Retrieval}} 
+    & \multicolumn{2}{c|}{\textbf{QA}}
+    & \textbf{Multi-hop} 
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-11} \cmidrule(lr){12-13} \cmidrule(lr){14-14}
+    & cwe & fwe 
+    & niah\_mk\_1 & niah\_mk\_2 & niah\_mk\_3 
+    & niah\_mq & niah\_mv 
+    & niah\_s\_1 & niah\_s\_2 & niah\_s\_3 
+    & qa\_1 & qa\_2 
+    & vt 
+    & \\
+\midrule
+
+%% ============================================================
+%% QWEN-8B
+%% ============================================================
+\multicolumn{15}{c}{\textbf{Qwen3-8B}} \\
+\midrule
+
+Full 
+    & 99.53 & 93.33 
+    & 100 & 100 & 100 
+    & 100 & 100 
+    & 100 & 100 & 100 
+    & 80.85 & 56.82 
+    & 100 
+    & 94.66 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.0 & 0.0 
+    & 5.56 & \textbf{0.0} & \textbf{0.0} 
+    & 7.46 & 9.21 
+    & 96.97 & 7.58 & 0.0 
+    & 4.26 & 2.27 
+    & 1.46 
+    & 10.37 \\
+
+ExpectedAttention 
+    & 3.26 & 39.33 
+    & 0.0 & \textbf{0.0} & \textbf{0.0} 
+    & 0.0 & 0.0 
+    & 7.58 & 0.0 & 0.0 
+    & \textbf{31.91} & 13.64 
+    & 1.46 
+    & 7.48 \\
+
+KVzip 
+    & 0.0 & 0.0 
+    & 0.0 & \textbf{0.0} & \textbf{0.0} 
+    & 0.0 & 0.0 
+    & \textbf{100} & 0.0 & 0.0 
+    & 19.15 & 15.91 
+    & \textbf{100} 
+    & 18.08 \\
+
+KV²(KeyDiff 2\%) 
+    & 7.44 & 59.33 
+    & \textbf{59.26} & \textbf{0.0} & \textbf{0.0} 
+    & 77.19 & 84.21 
+    & \textbf{100} & 89.39 & 92.86 
+    & 29.79 & \textbf{25.0} 
+    & 13.17 
+    & 49.05 \\
+
+KV²+(KeyDiff 2 $\times$ 2\%) 
+    & \textbf{10.7} & \textbf{73.33} 
+    & 57.41 & \textbf{0.0} & \textbf{0.0} 
+    & \textbf{78.07} & \textbf{86.4} 
+    & \textbf{100} & \textbf{93.94} & \textbf{97.62} 
+    & \textbf{31.91} & 20.45 
+    & 13.17 
+    & \textbf{51.00} \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.7 & 12.67 
+    & 14.81 & 0.0 & \textbf{0.0} 
+    & 30.26 & 28.95 
+    & \textbf{100} & 30.3 & 28.57 
+    & 0.0 & 6.82 
+    & 3.41 
+    & 19.73 \\
+
+ExpectedAttention 
+    & 15.81 & 72.67
+    & 48.15 & 0.0 & \textbf{0.0} 
+    & 38.16 & 48.25 
+    & 98.48 & 36.36 & 0.0 
+    & 31.91 & 15.91
+    & 72.68 
+    & 36.80 \\
+
+KVzip 
+    & 9.3 & 46.67 
+    & 33.33 & \textbf{59.46} & \textbf{0.0} 
+    & 20.18 & 16.67 
+    & \textbf{100} & 12.12 & 11.9 
+    & 36.17 & \textbf{22.73} 
+    & \textbf{100} 
+    & 36.04 \\
+
+KV²(KeyDiff 5\%) 
+    & 23.95 & \textbf{85.33} 
+    & 87.04 & 0.0 & \textbf{0.0} 
+    & 95.61 & 99.56 
+    & \textbf{100} & 98.48 & \textbf{100} 
+    & \textbf{44.68} & \textbf{22.73} 
+    & 97.07 
+    & 65.73 \\
+
+KV²+(KeyDiff 2 $\times$ 5\%) 
+    & \textbf{45.58} & 84.67 
+    & \textbf{90.74} & 8.11 & \textbf{0.0} 
+    & \textbf{96.93} & \textbf{100} 
+    & \textbf{100} & \textbf{100} & \textbf{100} 
+    & \textbf{44.68} & \textbf{22.73} 
+    & 99.51 
+    & \textbf{68.69} \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 10\%}} \\
+\midrule
+
+KeyDiff 
+    & 5.35 & 41.33
+    & 53.7 & 0.0 & 0.0
+    & 70.18 & 59.21 
+    & \textbf{100.0} & 54.55 & 59.52 
+    & 6.38 & 6.82 
+    & 25.85 
+    & 37.15 \\
+
+ExpectedAttention 
+    & 61.16 & 90.67
+    & 92.59 & 27.03 & 0.0
+    & 91.23 & 95.18 
+    & \textbf{100.0} & 89.39 & 9.52 
+    & 40.43 & 29.55 
+    & \textbf{100.0}
+    & 63.60 \\
+
+KVzip 
+    & 81.16 & 84.0
+    & 75.93 & \textbf{94.59} & \textbf{93.48}
+    & 97.37 & 80.26 
+    & \textbf{100} & 92.42 & 97.62 
+    & \textbf{76.6} & \textbf{56.82} 
+    & \textbf{100.0} 
+    & \textbf{86.94} \\
+
+KV²(KeyDiff 10\%) 
+    & 79.53 & 91.33
+    & 94.44 & 8.11 & 4.35
+    & 98.25 & \textbf{100.0} 
+    & \textbf{100.0} & \textbf{100.0} & 97.62 
+    & 57.45 & 29.55 
+    & \textbf{100.0} 
+    & 73.89 \\
+
+KV²+(KeyDiff 2 $\times$ 10\%) 
+    & \textbf{90.23} & \textbf{93.33}
+    & \textbf{100.0} & 18.92 & 6.52
+    & \textbf{99.12} & \textbf{100.0} 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0} 
+    & 59.57 & 36.36 
+    & \textbf{100.0} 
+    & 77.23 \\ 
+
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+\newpage
+
+\begin{table}[htbp]
+\centering
+\caption{RULER-4K Benchmark Results on Llama-3.1-8B-Instruct with 2\%, 5\%, and 10\% KV Cache Sizes}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cc|cccccccc|cc|c|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{2}{c|}{\textbf{Aggregation}}
+    & \multicolumn{8}{c|}{\textbf{Retrieval}} 
+    & \multicolumn{2}{c|}{\textbf{QA}}
+    & \textbf{Multi-hop} 
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-11} \cmidrule(lr){12-13} \cmidrule(lr){14-14}
+    & cwe & fwe 
+    & niah\_mk\_1 & niah\_mk\_2 & niah\_mk\_3 
+    & niah\_mq & niah\_mv 
+    & niah\_s\_1 & niah\_s\_2 & niah\_s\_3 
+    & qa\_1 & qa\_2 
+    & vt 
+    & \\
+\midrule
+
+%% ============================================================
+%% LLAMA-3-8B-INSTRUCT
+%% ============================================================
+\multicolumn{15}{c}{\textbf{Llama-3.1-8B-Instruct}} \\
+\midrule
+
+Full 
+    & 99.07 & 95.33 
+    & 100 & 100 & 100
+    & 100 & 100
+    & 100 & 100 & 100
+    & 87.23 & 61.36 
+    & 100 
+    & 95.61 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KeyDiff 
+    & 0.0 & 31.33 
+    & 18.52 & 0.0 & \textbf{0.0} 
+    & 24.56 & 22.81 
+    & 98.48 & 71.21 & 0.0 
+    & \textbf{21.28} & 13.64 
+    & 0.0 
+    & 23.22 \\
+
+ExpectedAttention
+    & 1.4 & 0.0 
+    & 0.0 & 0.0 & \textbf{0.0}  
+    & 0.0 & 0.0 
+    & 56.06 & 0.0 & 0.0 
+    & \textbf{21.28} & 13.64
+    & 1.46 
+    & 7.22 \\
+
+KVzip 
+    & 0.23 & 0.0 
+    & 0.0 & \textbf{2.7} & \textbf{0.0} 
+    & 0.0 & 0.0 
+    & \textbf{100} & 4.55 & 0.0 
+    & 19.15 & \textbf{18.18} 
+    & \textbf{88.29} 
+    & 17.93 \\
+
+KV²(KeyDiff 2\%) 
+    & 12.56 & 73.33 
+    & 72.22 & 0.0 & \textbf{0.0} 
+    & 92.54 & 93.86 
+    & \textbf{100} & 96.97 & 85.71 
+    & \textbf{21.28} & 15.91 
+    & 29.27
+    & 53.36 \\
+
+KV²+(KeyDiff 2 $\times$ 2\%) 
+    & 12.56 & 78.0 
+    & 75.93 & 0.0 & \textbf{0.0} 
+    & 96.49 & 92.54 
+    & \textbf{100} & \textbf{100} & 83.33 
+    & \textbf{21.28} & \textbf{18.18} 
+    & 41.95 
+    & 55.40 \\
+
+KV²+(KeyDiff 5 $\times$ 2\%) 
+    & \textbf{18.37} & \textbf{80.0} 
+    & \textbf{87.04} & \textbf{2.7} & \textbf{0.0} 
+    & \textbf{98.25} & \textbf{98.68} 
+    & \textbf{100} & 95.45 & \textbf{100} 
+    & 19.15 & 15.91 
+    & 60.98 
+    & \textbf{59.73} \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 1.63 & 52.67 
+    & 79.63 & 0.0 & 0.0 
+    & 83.33 & 75.0 
+    & \textbf{100} & \textbf{100} & 78.57 
+    & 6.38 & 11.36 
+    & 23.9 
+    & 47.11 \\
+
+ExpectedAttention
+    & 11.16 & 0.0 
+    & 0.0 & 0.0 & 0.0 
+    & 0.0 & 0.44 
+    & 78.79 & 4.55 & 0.0 
+    & 27.66 & 25.0
+    & 18.05 
+    & 12.74 \\
+
+KVzip 
+    & 3.26 & 60.67 
+    & 83.33 & \textbf{78.38} & \textbf{17.39} 
+    & 75.88 & 44.3 
+    & \textbf{100} & 98.48 & 92.86 
+    & \textbf{40.43} & \textbf{31.82} 
+    & 97.07 
+    & 63.37 \\
+
+KV²(KeyDiff 5\%) 
+    & 34.88 & 84.67 
+    & 90.74 & 2.7 & 0.0 
+    & 98.68 & \textbf{99.56} 
+    & \textbf{100} & \textbf{100} & \textbf{100} 
+    & 34.04 & 29.55 
+    & \textbf{99.02} 
+    & 67.22 \\
+
+KV²+(KeyDiff 2 $\times$ 5\%)  
+    & 39.07 & 87.33 
+    & 96.3 & 8.11 & 4.35 
+    & 99.12 & 98.25 
+    & \textbf{100} & \textbf{100} & \textbf{100} 
+    & 34.04 & 29.55 
+    & 98.05 
+    & \textbf{68.78} \\
+
+KV²+(KeyDiff 5 $\times$ 5\%)  
+    & \textbf{44.88} & \textbf{88.0} 
+    & \textbf{98.15} & 10.81 & 2.17 
+    & \textbf{99.56} & 98.68 
+    & \textbf{100} & \textbf{100} & \textbf{100} 
+    & 27.66 & 18.18 
+    & 98.54 
+    & 68.20 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 10\%}} \\
+\midrule
+
+KeyDiff 
+    & 10.93 & 68.0
+    & 98.15 & 2.7 & 0.0
+    & 98.68 & 95.61 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0} 
+    & 21.28 & 13.64 
+    & 76.59 
+    & 60.43 \\
+
+ExpectedAttention 
+    & 30.7 & 38.0
+    & 16.67 & 10.81 & 0.0
+    & 15.79 & 14.91 
+    & 95.45 & 36.36 & 0.0 
+    & 36.17 & 29.55 
+    & 66.83 
+    & 30.10 \\
+
+KVzip 
+    & 72.33 & \textbf{92.67}
+    & \textbf{100.0} & \textbf{97.3} & \textbf{97.83}
+    & 98.68 & 92.11 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0} 
+    & \textbf{80.85} & \textbf{54.55} 
+    & 98.54 
+    & \textbf{91.14} \\
+
+KV²(KeyDiff 10\%) 
+    & 79.3 & 90.0
+    & \textbf{100.0} & 16.22 & 6.52
+    & \textbf{100.0} & \textbf{100.0} 
+    & 98.48 & \textbf{100.0} & \textbf{100.0} 
+    & 63.83 & 38.64 
+    & 99.51 
+    & 76.35 \\
+
+KV²+(KeyDiff 2 $\times$ 10\%) 
+    & 82.33 & 91.33
+    & \textbf{100.0} & 43.24 & 6.52
+    & \textbf{100.0} & \textbf{100.0} 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0} 
+    & 51.06 & 45.45 
+    & \textbf{100.0} 
+    & 78.46 \\ 
+
+KV²+(KeyDiff 5 $\times$ 10\%) 
+    & \textbf{85.12} & 90.67
+    & \textbf{100.0} & 51.35 & 17.39
+    & \textbf{100.0} & 98.68 
+    & \textbf{100.0} & \textbf{100.0} & \textbf{100.0} 
+    & 51.06 & 34.09 
+    & \textbf{100.0} 
+    & 79.10 \\ 
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\end{document}

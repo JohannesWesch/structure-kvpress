@@ -1,0 +1,349 @@
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{xcolor}
+
+% Page setup for wide table
+\geometry{
+    a4paper,
+    landscape,
+    margin=1.0cm
+}
+
+% Custom column type for better alignment
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{table}[htbp]
+\centering
+\caption{RULER-4k Results with different Reconstruction Percentages}
+\label{tab:ruler_results}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cc|cccccccc|cc|c|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{2}{c|}{\textbf{Aggregation}}
+    & \multicolumn{8}{c|}{\textbf{Retrieval}} 
+    & \multicolumn{2}{c|}{\textbf{QA}}
+    & \textbf{Multi-hop} 
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-11} \cmidrule(lr){12-13} \cmidrule(lr){14-14}
+    & cwe & fwe 
+    & niah\_mk\_1 & niah\_mk\_2 & niah\_mk\_3 
+    & niah\_mq & niah\_mv 
+    & niah\_s\_1 & niah\_s\_2 & niah\_s\_3 
+    & qa\_1 & qa\_2 
+    & vt 
+    & \\
+\midrule
+
+%% ============================================================
+%% QWEN-8B
+%% ============================================================
+\multicolumn{15}{c}{\textbf{Llama-3.1-8B-Instruct}} \\
+\midrule
+
+Full 
+    & 99.07 & 95.33 
+    & 100 & 100 & 100
+    & 100 & 100
+    & 100 & 100 & 100
+    & 87.23 & 61.36 
+    & 100 
+    & 95.61 \\
+
+
+\midrule
+\multicolumn{15}{c}{\textit{KeyDiff}} \\
+\midrule
+    
+KV²(KeyDiff 2\%) 
+    & 12.56 & 73.33 
+    & 72.22 & 0.0 & 0.0 
+    & 92.54 & 93.86 
+    & 100.0 & 96.97 & 85.71 
+    & 21.28 & 15.91 
+    & 29.27
+    & 53.36 \\
+
+KV²(KeyDiff 5\%) 
+    & 15.81 & 71.33 
+    & 83.33 & 0.0 & 0.0
+    & 98.25 & 98.68 
+    & 100.0 & 98.48 & 100.0
+    & 21.28 & 13.64
+    & 91.71 
+    & 60.96 \\
+
+KV²(KeyDiff 10\%) 
+    & 10.23 & 82.67 
+    & 98.15 & 2.7 & 0.0
+    & 97.81 & 89.04 
+    & 100.0 & 93.94 & 97.62
+    & 25.53 & 22.73
+    & 95.61 
+    & 62.77 \\
+
+KV²(KeyDiff 2 $\times$ 10\%) 
+    & 14.18 & 83.33 
+    & 94.44 & 2.7 & 2.17
+    & 98.25 & 85.09 
+    & 100.0 & 95.45 & 100.0
+    & 27.66 & 22.73
+    & 94.63 
+    & 63.13 \\
+
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+\newpage
+
+\begin{table}[htbp]
+\centering
+\caption{RULER-4k Results on 2\% KV Size with multiple Self-Refinement Steps}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cc|cccccccc|cc|c|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} 
+    & \multicolumn{2}{c|}{\textbf{Aggregation}}
+    & \multicolumn{8}{c|}{\textbf{Retrieval}} 
+    & \multicolumn{2}{c|}{\textbf{QA}}
+    & \textbf{Multi-hop} 
+    & \multirow{2}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-11} \cmidrule(lr){12-13} \cmidrule(lr){14-14}
+    & cwe & fwe 
+    & niah\_mk\_1 & niah\_mk\_2 & niah\_mk\_3 
+    & niah\_mq & niah\_mv 
+    & niah\_s\_1 & niah\_s\_2 & niah\_s\_3 
+    & qa\_1 & qa\_2 
+    & vt 
+    & \\
+\midrule
+
+%% ============================================================
+%% LLAMA-3-8B-INSTRUCT
+%% ============================================================
+\multicolumn{15}{c}{\textbf{Llama-3.1-8B-Instruct}} \\
+\midrule
+
+Full 
+    & 99.07 & 95.33 
+    & 100 & 100 & 100
+    & 100 & 100
+    & 100 & 100 & 100
+    & 87.23 & 61.36 
+    & 100 
+    & 95.61 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{Random 2\%}} \\
+\midrule
+
+KV²(Random 2\%) 
+    & 14.65 & 74.0 
+    & 7.41 & 2.7 & 0.0
+    & 7.89 & 10.09 
+    & 22.73 & 13.64 & 0.0
+    & 19.15 & 13.64 
+    & 39.02 
+    & 17.3 \\
+
+KV²(Random 2 $\times$ 2\%) 
+    & 14.42 & 81.33 
+    & 18.52 & 0.0 & 0.0
+    & 23.68 & 24.56 
+    & 100.0 & 59.09 & 0.0
+    & 19.15 & 13.64 
+    & 68.29 
+    & 32.51 \\
+
+KV²(Random 3 $\times$ 2\%) 
+    & 18.14 & 79.33 
+    & 35.19 & 0.0 & 0.0
+    & 37.72 & 34.65 
+    & 100.0 & 66.67 & 0.0
+    & 19.15 & 11.36 
+    & 77.56 
+    & 36.91 \\
+
+KV²(Random 4 $\times$ 2\%) 
+    & 20.93 & 78.0 
+    & 37.04 & 0.0 & 0.0
+    & 46.05 & 39.91 
+    & 100.0 & 74.24 & 7.14
+    & 17.02 & 15.91 
+    & 82.44 
+    & 39.90 \\
+
+KV²(Random 5 $\times$ 2\%) 
+    & 20.47 & 76.0 
+    & 37.04 & 0.0 & 0.0
+    & 47.81 & 46.05 
+    & 100.0 & 75.76 & 4.76
+    & 21.28 & 11.36 
+    & 83.41 
+    & 40.30 \\
+
+
+KV²+(Random 2\%) 
+    & 15.58 & 78.67 
+    & 3.7 & 2.7 & 0.0
+    & 7.46 & 7.46 
+    & 34.85 & 12.12 & 0.0
+    & 17.02 & 13.64 
+    & 41.95 
+    & 18.09 \\
+
+KV²+(Random 2 $\times$ 2\%) 
+    & 20.93 & 82.67
+    & 40.74 & 0.0 & 0.0
+    & 43.86 & 39.04 
+    & 100.0 & 65.15 & 0.0
+    & 23.4 & 13.64 
+    & 91.71 
+    & 40.09 \\
+
+KV²+(Random 3 $\times$ 2\%) 
+    & 20.0 & 79.33 
+    & 46.3 & 0.0 & 0.0
+    & 56.14 & 46.49 
+    & 100.0 & 83.33 & 0.0
+    & 23.4 & 18.18 
+    & 94.63 
+    & 43.68 \\
+
+KV²+(Random 4 $\times$ 2\%) 
+    & 19.3 & 79.33 
+    & 64.81 & 0.0 & 0.0
+    & 67.54 & 56.14 
+    & 100.0 & 87.88 & 9.52
+    & 23.4 & 15.91 
+    & 96.59 
+    & 47.72 \\
+
+KV²+(Random 5 $\times$ 2\%) 
+    & 17.21 & 78.0 
+    & 66.67 & 0.0 & 0.0
+    & 69.3 & 62.72 
+    & 100.0 & 89.39 & 23.81
+    & 27.66 & 13.64 
+    & 96.59 
+    & 49.61 \\
+
+\midrule
+\multicolumn{15}{c}{\textit{Random 10\%}} \\
+\midrule
+
+KV²(Random 10\%) 
+    & 5.58 & 66.67 
+    & 1.85 & 10.81 & 0.0
+    & 4.82 & 3.95 
+    & 39.39 & 22.73 & 0.0
+    & 19.15 & 20.45 
+    & 66.83 
+    & 20.17 \\
+
+KV²(Random 2 $\times$ 10\%) 
+    & 13.26 & 76.67 
+    & 14.81 & 5.41 & 6.52
+    & 17.11 & 17.54 
+    & 100.0 & 74.24 & 0.0
+    & 23.4 & 13.64
+    & 96.1 
+    & 35.28 \\
+
+KV²(Random 3 $\times$ 10\%) 
+    & 13.26 & 81.33 
+    & 27.78 & 13.51 & 6.52
+    & 23.25 & 21.49 
+    & 100.0 & 80.3 & 2.38
+    & 19.15 & 13.64 
+    & 94.63 
+    & 38.25 \\
+
+KV²(Random 4 $\times$ 10\%) 
+    & 16.98 & 76.67 
+    & 29.63 & 10.81 & 6.52
+    & 27.19 & 23.25 
+    & 100.0 & 81.82 & 7.14
+    & 19.15 & 15.91 
+    & 95.12 
+    & 39.25 \\
+
+KV²(Random 5 $\times$ 10\%) 
+    & 21.4 & 80.67 
+    & 37.04 & 13.51 & 6.52
+    & 32.89 & 21.49 
+    & 100.0 & 84.85 & 11.9
+    & 19.15 & 22.73 
+    & 94.63 
+    & 42.06 \\
+
+KV²+(Random 10\%) 
+    & 4.42 & 73.33 
+    & 1.85 & 5.41 & 0.0
+    & 7.46 & 5.26 
+    & 48.48 & 24.24 & 0.0
+    & 19.15 & 22.73 
+    & 27.68 
+    & 21.92 \\
+
+KV²+(Random 2 $\times$ 10\%) 
+    & 13.26 & 74.0 
+    & 33.33 & 5.41 & 4.35
+    & 46.05 & 32.02 
+    & 100.0 & 92.42 & 0.0
+    & 19.15 & 18.18 
+    & 95.61 
+    & 41.06 \\
+
+KV²+(Random 3 $\times$ 10\%) 
+    & 19.3 & 79.33 
+    & 57.41 & 10.81 & 6.52
+    & 57.46 & 38.6 
+    & 100.0 & 96.97 & 7.14
+    & 21.28 & 15.91 
+    & 95.61 
+    & 46.64 \\
+
+KV²+(Random 4 $\times$ 10\%) 
+    & 20.23 & 75.33 
+    & 66.67 & 13.51 & 6.52
+    & 66.67 & 45.18 
+    & 100.0 & 95.45 & 16.67
+    & 17.02 & 15.91 
+    & 95.12 
+    & 48.79 \\
+
+KV²+(Random 5 $\times$ 10\%) 
+    & 26.51 & 78.67 
+    & 70.37 & 13.51 & 6.52
+    & 69.74 & 44.3 
+    & 100.0 & 98.48 & 19.05
+    & 21.28 & 15.91 
+    & 95.12 
+    & 50.73 \\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\end{document}

@@ -1,0 +1,223 @@
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{xcolor}
+
+% Page setup - landscape for wide tables
+\geometry{
+    a4paper,
+    landscape,
+    margin=1.0cm
+}
+
+\begin{document}
+\pagestyle{empty}
+
+%% ============================================================
+%% TABLE 1: Single-Doc QA, Multi-Doc QA, Summarization
+%% ============================================================
+\begin{table}[htbp]
+\centering
+\caption{Evaluation of Llama-3.1-8B-Instruct on LongBench-E (By Word Count)}
+\label{tab:longbench_e_results_1}
+\footnotesize
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cccc|cccc|ccccc}
+\toprule
+\multirow{3}{*}{\textbf{Method}} 
+    & \multicolumn{4}{c|}{\textbf{Single-Doc QA}}
+    & \multicolumn{4}{c|}{\textbf{Multi-Doc QA}}
+    & \multicolumn{5}{c}{\textbf{Summarization}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-14}
+    & \multicolumn{4}{c|}{NrtvQA}
+    & \multicolumn{4}{c|}{HotpotQA}
+    & \multicolumn{5}{c}{QMSum} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-14}
+    & 8k & 16k & 16k+ & $\mu$
+    & 4k & 8k & 16k & $\mu$
+    & 4k & 8k & 16k & 16k+ & $\mu$ \\
+\midrule
+
+Full 
+    & 35.06 & 21.48 & 34.12 & 30.85
+    & 63.77 & 59.47 & 59.45 & 60.9
+    & 22.14 & 26.34 & 25.32 & 23.54 & 25.21 \\
+
+% \midrule
+% \multicolumn{14}{c}{\textit{KV Size = 2\%}} \\
+% \midrule
+
+% KeyDiff 
+%     & -- & -- & -- & --
+%     & -- & -- & -- & --
+%     & -- & -- & -- & -- & -- \\
+
+% KVzip 
+%     & -- & -- & -- & --
+%     & -- & -- & -- & --
+%     & -- & -- & -- & -- & -- \\
+
+% KVsquared(KeyDiff 2\%) 
+%     & -- & -- & -- & --
+%     & -- & -- & -- & --
+%     & -- & -- & -- & -- & -- \\
+
+\midrule
+\multicolumn{14}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 19.87 & 14.12 & 28.51 & 23.29
+    & 26.27 & 24.45 & 30.93 & 27.22
+    & 15.58 & 19.34 & 21.0 & 18.69 & 19.97 \\
+
+KVzip 
+    & 19.9 & 15.07 & 27.32 & 22.86
+    & 36.18 & 27.28 & 33.44 & 32.3
+    & \textbf{20.08} & 21.62 & 21.24 & \textbf{21.58} & 21.31 \\
+
+KV²(KeyDiff 5\%, 2k) 
+    & \textbf{23.87} & 19.59 & 34.51 & 28.83
+    & \textbf{48.68} & \textbf{53.58} & 45.06 & 49.1
+    & \textbf{20.08} & 21.62 & 21.24 & \textbf{21.58} & 21.31 \\
+
+KV²(KeyDiff 5\%, 8k) 
+    & 20.7 & 15.96 & 32.71 & 26.33
+    & 45.13 & 51.12 & \textbf{53.95} & \textbf{50.07}
+    & 20.07 & \textbf{24.81} & 23.52 & 19.11 & \textbf{23.19} \\
+
+KV²(KeyDiff 5\%, 32k) 
+    & 19.24 & \textbf{22.36} & \textbf{38.0} & \textbf{30.87}
+    & 45.13 & 49.41 & 53.18 & 49.24
+    & 20.07 & 24.22 & \textbf{23.59} & 19.73 & 23.13 \\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\vspace{1cm}
+
+%% ============================================================
+%% TABLE 2: Few-shot, Synthetic, Code
+%% ============================================================
+\begin{table}[htbp]
+\centering
+\caption{Evaluation of Llama-3.1-8B-Instruct on LongBench-E (By Word Count)}
+\label{tab:longbench_e_results_2}
+\footnotesize
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabular}{l|cccc|cccc|ccccc|c}
+\toprule
+\multirow{3}{*}{\textbf{Method}} 
+    & \multicolumn{4}{c|}{\textbf{Few-shot}}
+    & \multicolumn{4}{c|}{\textbf{Synthetic}}
+    & \multicolumn{5}{c|}{\textbf{Code}}
+    & \multirow{3}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-14}
+    & \multicolumn{4}{c|}{TREC}
+    & \multicolumn{4}{c|}{PCount}
+    & \multicolumn{5}{c|}{Lcc} % & \multicolumn{5}{c|}{RB-P}
+\\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-14}
+    & 4k & 8k & 16k & $\mu$
+    & 4k & 8k & 16k & $\mu$
+    & 4k & 8k & 16k & 16k+ & $\mu$ % & 4k & 8k & 16k & 16k+ & $\mu$
+\\
+\midrule
+
+Full 
+    & 30.0 & 22.0 & 14.0 & 22.0
+    & 28.0 & 13.3 & 19.0 & 20.1
+    & 49.06 & 43.97 & 38.36 & 60.00 & 44.16 % & 48.04 & 39.37 & 38.88 & 47.0 & 42.2
+    & 33.87 \\
+
+% \midrule
+% \multicolumn{19}{c}{\textit{KV Size = 2\%}} \\
+% \midrule
+
+% KeyDiff 
+%     & -- & -- & -- & --
+%     & -- & -- & -- & --
+%     & -- & -- & -- & -- & --
+%     & -- & -- & -- & -- & -- \\
+
+% KVzip 
+%     & -- & -- & -- & --
+%     & -- & -- & -- & --
+%     & -- & -- & -- & -- & --
+%     & -- & -- & -- & -- & -- \\
+
+% KVsquared(KeyDiff 2\%) 
+%     & -- & -- & -- & --
+%     & -- & -- & -- & --
+%     & -- & -- & -- & -- & --
+%     & -- & -- & -- & -- & -- \\
+
+\midrule
+\multicolumn{15}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff 
+    & 23.0 & 35.0 & 25.0 & 27.67
+    & 14.0 & 10.0 & 15.0 & 13.0
+    & 16.53 & 21.91 & 18.41 & 24.2 & 19.05 % & 51.39 & 40.83 & 37.92 & 30.5 & 43.28
+    & 21.70 \\
+
+KVzip 
+    & 7.0 & 13.0 & 17.0 & 12.33
+    & 17.0 & 5.0 & 6.0 & 9.33
+    & 30.52 & 25.56 & 19.09 & 23.67 & 25.06 % & -- & -- & -- & -- & --
+    & 20.53 \\
+
+KV²(KeyDiff 5\%, 2k)
+    & 29.5 & 41.0 & 38.0 & 36.17
+    & \textbf{28.55} & \textbf{15.17} & \textbf{18.0} & \textbf{20.57}
+    & \textbf{45.14} & 37.44 & 30.72 & \textbf{45.8} & 38.02 % & -- & -- & -- & -- & --
+    & 32.33 \\
+
+KV²(KeyDiff 5\%, 8k)
+    & \textbf{30.5} & \textbf{54.0} & 40.0 & \textbf{41.5}
+    & 28.27 & 11.95 & 14.0 & 18.07
+    & 43.43 & \textbf{40.97} & \textbf{31.16} & 30.2 & \textbf{38.5} % & -- & -- & -- & -- & --
+    & 32.94 \\
+
+KV²(KeyDiff 5\%, 32k)
+    & \textbf{30.5} & 52.0 & \textbf{41.0} & 41.17
+    & 28.27 & 12.87 & 16.0 & 19.05
+    & 42.6 & 37.91 & 28.95 & 30.0 & 36.5 % & -- & -- & -- & -- & --
+    & 33.33 \\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+%% ============================================================
+%% Column to data_dir mapping for evaluation (use longbench-e):
+%% ============================================================
+%% Table 1:
+%% NrtvQA   -> narrativeqa (no _e variant available)
+%% HotpotQA -> hotpotqa_e
+%% GovRep   -> gov_report_e
+%% QMSum -> qmsum
+%%
+%% Table 2:
+%% TREC     -> trec_e
+%% PCount   -> passage_count_e
+%% Lcc      -> lcc_e
+%% RB-P     -> repobench-p_e
+%% ============================================================
+
+\end{document}
