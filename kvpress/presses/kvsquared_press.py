@@ -48,7 +48,7 @@ class KVSquaredPress(KVzipPress):
 
     chunk_size: int = 16384
     inner_press: ScorerPress | KVSquaredPress = field(default_factory=lambda: KeyDiffPress())
-    top_ratio: float = 0.1
+    top_ratio: float = 0.02
 
     def __post_init__(self):
         assert 0 <= self.compression_ratio < 1, "compression_ratio must be in [0, 1)"

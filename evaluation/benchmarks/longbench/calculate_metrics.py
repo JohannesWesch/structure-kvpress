@@ -37,21 +37,26 @@ def calculate_metrics_e(df):
 
 
 def scorer_e(dataset, predictions, answers, lengths, all_classes):
-    scores = {"0-4k": [], "4-8k": [], "8k+": []}  # type:ignore[var-annotated]
+    scores = {"0-4k": [], "4-8k": [], "8-16k": [], "16k+": []}  # type:ignore[var-annotated]
+    all_scores = []
     for prediction, ground_truths, length in zip(predictions, answers, lengths):
         score = 0.0
         if dataset in ["trec", "triviaqa", "samsum", "lsht"]:
             prediction = prediction.lstrip("\n").split("\n")[0]
         for ground_truth in ground_truths:
             score = max(score, dataset2metric[dataset](prediction, ground_truth, all_classes=all_classes))
+        all_scores.append(score)
         if length < 4000:
             scores["0-4k"].append(score)
         elif length < 8000:
             scores["4-8k"].append(score)
+        elif length < 16000:
+            scores["8-16k"].append(score)
         else:
-            scores["8k+"].append(score)
+            scores["16k+"].append(score)
     for key in scores.keys():
-        scores[key] = round(100 * np.mean(scores[key]), 2)
+        scores[key] = round(100 * np.mean(scores[key]), 2) if scores[key] else None
+    scores["avg"] = round(100 * np.mean(all_scores), 2) if all_scores else None
     return scores
 
 
