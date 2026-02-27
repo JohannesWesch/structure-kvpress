@@ -410,6 +410,8 @@ class EvaluationRunner:
                 question = row["question"]
                 answer_prefix = row["answer_prefix"]
                 max_new_tokens = self.config.max_new_tokens or row["max_new_tokens"]
+                context_num_tokens = len(self.pipeline.tokenizer(context, add_special_tokens=False)["input_ids"])
+                logger.info(f"Processed context length (tokens): {context_num_tokens}")
                 
                 # Set current sample ID on press for logging
                 if self.press is not None and hasattr(self.press, "set_current_sample_id"):
@@ -426,6 +428,9 @@ class EvaluationRunner:
                     max_context_length=self.config.max_context_length,
                 )
                 self.df.loc[index, "predicted_answer"] = output["answer"]  # type: ignore[union-attr]
+                if self.config.dataset == "needle_in_haystack":
+                    depth = row.get("needle_depth", "?")
+                    logger.info(f"[depth={depth}] predicted: {output['answer']}")
                 torch.cuda.empty_cache()  # Clear CUDA cache to free up memory
 
         else:
@@ -442,6 +447,8 @@ class EvaluationRunner:
                 # Use max_new_tokens from config, or fallback to dataset's default for the task
                 max_new_tokens = self.config.max_new_tokens or df_group["max_new_tokens"].iloc[0]
                 answer_prefix = df_group["answer_prefix"].iloc[0]
+                context_num_tokens = len(self.pipeline.tokenizer(context, add_special_tokens=False)["input_ids"])
+                logger.info(f"Processed context length (tokens): {context_num_tokens}")
                 
                 # Set current sample ID on press for logging
                 if self.press is not None and hasattr(self.press, "set_current_sample_id"):
@@ -462,6 +469,10 @@ class EvaluationRunner:
                     max_context_length=self.config.max_context_length,
                 )
                 self.df.loc[df_group.index, "predicted_answer"] = output["answers"]  # type: ignore[union-attr]
+                if self.config.dataset == "needle_in_haystack":
+                    for idx, ans in zip(df_group.index, output["answers"]):
+                        depth = self.df.loc[idx].get("needle_depth", "?")
+                        logger.info(f"[depth={depth}] predicted: {ans}")
                 # Store the actual compression ratio used (if the press has one)
                 self.df.loc[df_group.index, "compression_ratio"] = (
                     self.press.compression_ratio if self.press is not None else 0.0  # type: ignore[attr-defined]
@@ -507,6 +518,10 @@ class EvaluationRunner:
 
         logger.info(f"Metrics saved to {save_filename}")
         logger.info(f"Metrics:\n{json.dumps(metrics, indent=2)}")
+
+        if dataset_name == "needle_in_haystack" and isinstance(metrics, list):
+            recall_list = [round(m["rouge-1"]["r"], 4) for m in metrics]
+            logger.info(f"Copy-paste rouge-1 recall: {recall_list}")
 
     def run_evaluation(self):
         """
