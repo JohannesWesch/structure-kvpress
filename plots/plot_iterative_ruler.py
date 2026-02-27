@@ -81,6 +81,8 @@ def main():
     plt.plot(ITERATIONS, KV2_KD_10PCT, label="KV² KeyDiff (10%)",
              color=COLOR_KD_10PCT, linestyle=":", **mk)
 
+    plt.axhline(y=91.22, color="gray", linestyle="--", linewidth=1.5, label="Oracle")
+
     plt.xlabel(XLABEL, fontsize=12)
     plt.ylabel(YLABEL, fontsize=12)
     plt.title(
@@ -91,7 +93,7 @@ def main():
     plt.legend(loc="best", fontsize=10)
     plt.grid(True, alpha=0.3)
     plt.xlim(0.5, 5.5)
-    plt.ylim(0, 70)
+    plt.ylim(0, 100)
     plt.xticks(ITERATIONS)
 
     plt.tight_layout()

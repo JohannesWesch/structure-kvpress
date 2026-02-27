@@ -42,20 +42,23 @@ class KVSquaredPress(KVzipPress):
         Size of chunks for processing context.
     inner_press : ScorerPress or KVSquaredPress, default=KeyDiffPress()
         Scoring mechanism for Stage 1. Any press with .score() or .compute_chunk_scores().
-    top_ratio : float, default=0.02
+    top_ratio : float, default=1 - compression_ratio
         Per-chunk fraction of tokens selected as reconstruction queries.
     """
 
     chunk_size: int = 16384
     inner_press: ScorerPress | KVSquaredPress = field(default_factory=lambda: KeyDiffPress())
-    top_ratio: float = 0.02
+    top_ratio: float = None
 
     def __post_init__(self):
         assert 0 <= self.compression_ratio < 1, "compression_ratio must be in [0, 1)"
         assert hasattr(self.inner_press, 'score') or hasattr(self.inner_press, 'compute_chunk_scores'), \
             "inner_press must have .score() or .compute_chunk_scores() method"
-        assert 0 < self.top_ratio <= 1, "top_ratio must be in (0, 1]"
         self._reset_internal_parameters()
+
+    @property
+    def _effective_top_ratio(self) -> float:
+        return self.top_ratio if self.top_ratio is not None else 1 - self.compression_ratio
 
     def _compute_chunk_scores(self, model: PreTrainedModel, chunk_start: int, chunk_end: int) -> torch.Tensor:
         """
@@ -65,6 +68,7 @@ class KVSquaredPress(KVzipPress):
         (for nested KVSquaredPress) or score() (for simple presses like KeyDiffPress).
         """
         if hasattr(self.inner_press, 'compute_chunk_scores'):
+            self.inner_press.compression_ratio = self.compression_ratio
             return self.inner_press.compute_chunk_scores(
                 model, self._cache, self._context_ids, chunk_start, chunk_end,
                 self.prefix_length, self.context_length
@@ -84,7 +88,7 @@ class KVSquaredPress(KVzipPress):
 
     def _select_query_positions(self, scores: torch.Tensor, chunk_start: int) -> torch.Tensor:
         """Select top-scoring positions as reconstruction queries."""
-        n_selected = max(int(scores.shape[-1] * self.top_ratio), 1)
+        n_selected = max(int(scores.shape[-1] * self._effective_top_ratio), 1)
         return (scores.topk(n_selected, dim=-1).indices + chunk_start).squeeze(0).sort().values
 
     def _run_chunk_reconstruction(self, model: PreTrainedModel, chunk_start: int, chunk_end: int):
