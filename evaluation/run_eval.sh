@@ -17,7 +17,7 @@ module load devel/cuda/12.8
 
 source .venv/bin/activate
 
-PRESS_NAMES=("kvzip" "kvsquared_2")
+PRESS_NAMES=("kvsquared" "kvsquared_5+")
 COMPRESSION_RATIOS=(0.25 0.5 0.75 0.9 0.95 0.98 0.99)
 
 NUM_GPUS=$(nvidia-smi --list-gpus | wc -l)
