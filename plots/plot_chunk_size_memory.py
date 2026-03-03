@@ -109,12 +109,11 @@ def plot_comparison():
 # =============================================================================
 
 def plot_iterative():
-    start = chunk_sizes.index("4k")
-    sizes = chunk_sizes[start:]
+    sizes = chunk_sizes
     x = np.arange(len(sizes))
-    d3, _ = process(KV2_002_MEM[start:])
-    d4, _ = process(KV2_002_2IT_MEM[start:])
-    d5, _ = process(KV2_002_5IT_MEM[start:])
+    d3, _ = process(KV2_002_MEM)
+    d4, _ = process(KV2_002_2IT_MEM)
+    d5, _ = process(KV2_002_5IT_MEM)
 
     fig, ax = plt.subplots(figsize=FIGSIZE)
 
