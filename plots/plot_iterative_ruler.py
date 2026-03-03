@@ -7,7 +7,14 @@ Data from iterative_ruler.tex. Eight lines total:
 Run: python plot_iterative_ruler.py
 """
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+mpl.rcParams.update({
+    "text.usetex": True,
+    "font.family": "serif",
+    "font.serif": ["Latin Modern Roman"],
+})
 
 # =============================================================================
 # DATA FROM iterative_ruler.tex
@@ -40,7 +47,7 @@ FULL_SCORE = 95.61  # Full KV cache baseline (Llama-3.1-8B-Instruct)
 
 FIGSIZE = (10, 6)
 XLABEL = "Iterations"
-YLABEL = "RULER Accuracy (%)"
+YLABEL = "Score"
 
 COLOR_RAND_2PCT = "#4A90D9"
 COLOR_RAND_10PCT = "#27AE60"
@@ -58,47 +65,47 @@ def main():
     mk = dict(marker="o", markersize=8, linewidth=2)
 
     # Random 2% — blue
-    plt.plot(ITERATIONS, KV2_PLUS_RAND_2PCT, label="KV²+ Random (2%)",
+    plt.plot(ITERATIONS, KV2_PLUS_RAND_2PCT, label=r"KV$^2$+ Random (2\%)",
              color=COLOR_RAND_2PCT, linestyle="-", **mk)
-    plt.plot(ITERATIONS, KV2_RAND_2PCT, label="KV² Random (2%)",
+    plt.plot(ITERATIONS, KV2_RAND_2PCT, label="_nolegend_",
              color=COLOR_RAND_2PCT, linestyle=":", **mk)
 
     # Random 10% — green
-    plt.plot(ITERATIONS, KV2_PLUS_RAND_10PCT, label="KV²+ Random (10%)",
+    plt.plot(ITERATIONS, KV2_PLUS_RAND_10PCT, label=r"KV$^2$+ Random (10\%)",
              color=COLOR_RAND_10PCT, linestyle="-", **mk)
-    plt.plot(ITERATIONS, KV2_RAND_10PCT, label="KV² Random (10%)",
+    plt.plot(ITERATIONS, KV2_RAND_10PCT, label="_nolegend_",
              color=COLOR_RAND_10PCT, linestyle=":", **mk)
 
     # KeyDiff 2% — red
-    plt.plot(ITERATIONS, KV2_PLUS_KD_2PCT, label="KV²+ KeyDiff (2%)",
+    plt.plot(ITERATIONS, KV2_PLUS_KD_2PCT, label=r"KV$^2$+ KeyDiff (2\%)",
              color=COLOR_KD_2PCT, linestyle="-", **mk)
-    plt.plot(ITERATIONS, KV2_KD_2PCT, label="KV² KeyDiff (2%)",
+    plt.plot(ITERATIONS, KV2_KD_2PCT, label="_nolegend_",
              color=COLOR_KD_2PCT, linestyle=":", **mk)
 
     # KeyDiff 10% — orange
-    plt.plot(ITERATIONS, KV2_PLUS_KD_10PCT, label="KV²+ KeyDiff (10%)",
+    plt.plot(ITERATIONS, KV2_PLUS_KD_10PCT, label=r"KV$^2$+ KeyDiff (10\%)",
              color=COLOR_KD_10PCT, linestyle="-", **mk)
-    plt.plot(ITERATIONS, KV2_KD_10PCT, label="KV² KeyDiff (10%)",
+    plt.plot(ITERATIONS, KV2_KD_10PCT, label="_nolegend_",
              color=COLOR_KD_10PCT, linestyle=":", **mk)
 
-    plt.axhline(y=91.22, color="gray", linestyle="--", linewidth=1.5, label="Oracle")
+    # plt.axhline(y=91.22, color="gray", linestyle="--", linewidth=1.5, label="Oracle")
 
     plt.xlabel(XLABEL, fontsize=12)
     plt.ylabel(YLABEL, fontsize=12)
-    plt.title(
-        "RULER-4k: Self-Refinement Steps (Llama-3.1-8B-Instruct, 2% KV Cache)",
-        fontsize=14,
-        fontweight="bold",
-    )
-    plt.legend(loc="best", fontsize=10)
+    # plt.title(
+    #     "RULER-4k: Self-Refinement Steps (Llama-3.1-8B-Instruct, 2% KV Cache)",
+    #     fontsize=14,
+    #     fontweight="bold",
+    # )
+    plt.legend(loc="lower right", fontsize=12)
     plt.grid(True, alpha=0.3)
     plt.xlim(0.5, 5.5)
-    plt.ylim(0, 100)
+    plt.ylim(0, 70)
     plt.xticks(ITERATIONS)
 
     plt.tight_layout()
-    plt.savefig("iterative_ruler.png", dpi=150, bbox_inches="tight")
-    print("Saved plot to: iterative_ruler.png")
+    plt.savefig("ruler_iterative.pdf", bbox_inches="tight")
+    print("Saved plot to: ruler_iterative.pdf")
     plt.show()
 
 

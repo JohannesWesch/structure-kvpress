@@ -5,8 +5,14 @@ Generates two graphs: one for Llama and one for Qwen.
 Run: python plot_ruler_methods.py
 """
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.ticker import FuncFormatter
+
+mpl.rcParams.update({
+    "text.usetex": True,
+    "font.family": "serif",
+    "font.serif": ["Latin Modern Roman"],
+})
 
 # =============================================================================
 # DATA FROM ruler.tex
@@ -16,50 +22,50 @@ from matplotlib.ticker import FuncFormatter
 
 # Qwen3-8B data
 QWEN_DATA = {
-    "KeyDiff": {
-        2: 10.37,
-        5: 19.73,
-        10: 37.15,
-    },
-    "ExpectedAttention": {
-        2: 7.48,
-        5: 36.80,
-        10: 63.60,
+    r"KV$^2$": {
+        0.02: 49.05,
+        0.05: 65.73,
+        0.10: 73.89,
     },
     "KVzip": {
-        2: 18.08,
-        5: 36.04,
-        10: 86.94,
+        0.02: 18.08,
+        0.05: 36.04,
+        0.10: 86.94,
     },
-    "KV²": {
-        2: 49.05,
-        5: 65.73,
-        10: 73.89,
+    "KeyDiff": {
+        0.02: 10.37,
+        0.05: 19.73,
+        0.10: 37.15,
+    },
+    "ExpectedAttention": {
+        0.02: 7.48,
+        0.05: 36.80,
+        0.10: 63.60,
     },
 }
 QWEN_FULL = 94.66  # Full KV cache baseline
 
 # Llama-3.1-8B-Instruct data
 LLAMA_DATA = {
-    "KeyDiff": {
-        2: 23.22,
-        5: 47.11,
-        10: 60.43,
-    },
-    "ExpectedAttention": {
-        2: 7.22,
-        5: 12.74,
-        10: 30.10,
+    r"KV$^2$": {
+        0.02: 53.36,
+        0.05: 67.22,
+        0.10: 76.35,
     },
     "KVzip": {
-        2: 17.93,
-        5: 63.37,
-        10: 91.14,
+        0.02: 17.93,
+        0.05: 63.37,
+        0.10: 91.14,
     },
-    "KV²": {
-        2: 53.36,
-        5: 67.22,
-        10: 76.35,
+    "KeyDiff": {
+        0.02: 23.22,
+        0.05: 47.11,
+        0.10: 60.43,
+    },
+    "ExpectedAttention": {
+        0.02: 7.22,
+        0.05: 12.74,
+        0.10: 30.10,
     },
 }
 LLAMA_FULL = 95.61  # Full KV cache baseline
@@ -69,15 +75,15 @@ LLAMA_FULL = 95.61  # Full KV cache baseline
 # =============================================================================
 
 FIGSIZE = (10, 6)
-XLABEL = "KV Cache Size"
-YLABEL = "RULER Accuracy (%)"
+XLABEL = "Compression Ratio"
+YLABEL = "Score"
 
 # Colors for each method
 COLORS = {
     "KeyDiff": "#000000",           # Black
     "ExpectedAttention": "#9B59B6", # Purple
     "KVzip": "#E74C3C",             # Red
-    "KV²": "#4A90D9",               # Blue
+    r"KV$^2$": "#4A90D9",            # Blue
 }
 
 # =============================================================================
@@ -112,25 +118,22 @@ def plot_model(data, full_score, title, output_file):
     
     plt.xlabel(XLABEL, fontsize=12)
     plt.ylabel(YLABEL, fontsize=12)
-    plt.title(title, fontsize=14, fontweight="bold")
+    plt.title(title, fontsize=14)
     plt.legend(loc="best", fontsize=10)
     plt.grid(True, alpha=0.3)
-    
-    # Format x-axis as percentages
+
     ax = plt.gca()
-    ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{int(x)}%"))
-    
-    # Invert x-axis so it goes from 15% to 0%
-    plt.xlim(15, 0)
+
+    # Invert x-axis so it goes from 0.10 to 0.02
+    plt.xlim(0.11, 0.01)
     plt.ylim(0, 100)
-    
-    # Set x-axis ticks at 10, 5, 2
-    ax.set_xticks([10, 5, 2])
+
+    ax.set_xticks([0.10, 0.05, 0.02])
     
     plt.tight_layout()
     
     if output_file:
-        plt.savefig(output_file, dpi=150, bbox_inches="tight")
+        plt.savefig(output_file, bbox_inches="tight")
         print(f"Saved plot to: {output_file}")
     
     plt.show()
@@ -141,16 +144,16 @@ def main():
     plot_model(
         data=QWEN_DATA,
         full_score=QWEN_FULL,
-        title="RULER-4k: Qwen3-8B",
-        output_file="ruler_qwen.png",
+        title="RULER 4k - Qwen3-8B",
+        output_file="ruler_4k_qwen.pdf",
     )
     
     # Plot Llama graph
     plot_model(
         data=LLAMA_DATA,
         full_score=LLAMA_FULL,
-        title="RULER-4k: Llama-3.1-8B-Instruct",
-        output_file="ruler_llama.png",
+        title="RULER 4k - Llama-3.1-8B-Instruct",
+        output_file="ruler_4k_llama.pdf",
     )
 
 

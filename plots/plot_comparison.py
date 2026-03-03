@@ -4,7 +4,14 @@ Plot comparison of KV cache compression methods.
 Edit the data below and run: python plot_comparison.py
 """
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+mpl.rcParams.update({
+    "text.usetex": True,
+    "font.family": "serif",
+    "font.serif": ["Latin Modern Roman"],
+})
 from matplotlib.ticker import FuncFormatter
 
 # =============================================================================
@@ -65,9 +72,9 @@ DATA = {
 
 TITLE = "KV² Compression Comparison (chunk_size=2048)"
 XLABEL = "Compression Ratio"
-YLABEL = "Score (%)"
+YLABEL = "Score"
 FIGSIZE = (10, 6)
-OUTPUT_FILE = "RULER.png"  # Set to None to only display, not save
+OUTPUT_FILE = "ruler_comparison.pdf"  # Set to None to only display, not save
 
 # Colors and markers for each method (matching plot_chunk_size.py where applicable)
 # Order: KVzip=blue, KVSquared+KeyDiff 0.5=red, 0.02=green, KeyDiff=black, RandomPress=black
@@ -112,7 +119,7 @@ def plot_comparison():
     
     # Format x-axis as percentages (e.g., 50%, 75%)
     ax = plt.gca()
-    ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{int(x * 100)}%"))
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: str(x)))
     
     # Set axis limits
     plt.xlim(0.0, 1.0)
@@ -121,7 +128,7 @@ def plot_comparison():
     plt.tight_layout()
     
     if OUTPUT_FILE:
-        plt.savefig(OUTPUT_FILE, dpi=150, bbox_inches="tight")
+        plt.savefig(OUTPUT_FILE, bbox_inches="tight")
         print(f"Saved plot to: {OUTPUT_FILE}")
     
     plt.show()

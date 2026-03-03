@@ -9,13 +9,20 @@ For each method:
 from pathlib import Path
 from typing import Dict, List, Optional
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+mpl.rcParams.update({
+    "text.usetex": True,
+    "font.family": "serif",
+    "font.serif": ["Latin Modern Roman"],
+})
 import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 
 DEPTHS = [15, 25, 35, 45, 55, 65, 75, 85, 95]
 CONTEXT_LENGTHS = list(range(10000, 130001, 10000))
-OUTPUT_PATH = Path(__file__).with_name("needle_recall_heatmaps.png")
+OUTPUT_PATH = Path(__file__).with_name("needle_in_haystack.pdf")
 
 
 # Fill values in DEPTHS order: [d15, d25, d35, d45, d55, d65, d75, d85, d95]
@@ -88,7 +95,7 @@ RECALL_DRAFT = {
     "KeyDiff": KEYDIFF,
     "KVzip": KVZIP,
     "Expected Attention": EXPECTED_ATTENTION,
-    "KV²": KVSQUARED,
+    r"KV$^2$": KVSQUARED,
 }
 
 
@@ -113,8 +120,9 @@ def _to_matrix(method_data: Dict[str, List[Optional[float]]]) -> np.ndarray:
 
 
 def plot_heatmaps() -> Path:
-    fig, axes = plt.subplots(2, 2, figsize=(16, 10), constrained_layout=True)
-    axes = axes.flatten()
+    fig, axes_2d = plt.subplots(2, 2, figsize=(16, 10), constrained_layout=True)
+    fig.set_constrained_layout_pads(hspace=0.12)
+    axes = axes_2d.flatten()
 
     # High recall = bright green, low recall = red. Everything below 0.2 is already red.
     cmap = LinearSegmentedColormap.from_list(
@@ -134,7 +142,9 @@ def plot_heatmaps() -> Path:
     cmap.set_bad(color="#d9d9d9")
 
     images = []
-    for ax, (method, method_data) in zip(axes, RECALL_DRAFT.items()):
+    for idx, (ax, (method, method_data)) in enumerate(zip(axes, RECALL_DRAFT.items())):
+        row, col = divmod(idx, 2)
+
         matrix = _to_matrix(method_data)
         masked = np.ma.masked_invalid(matrix)
         image = ax.imshow(
@@ -147,23 +157,27 @@ def plot_heatmaps() -> Path:
         )
         images.append(image)
 
-        ax.set_title(method, fontsize=18)
-        ax.set_xlabel("Context Length", fontsize=12)
-        ax.set_ylabel("Depth Percent", fontsize=12)
+        ax.set_title(method, fontsize=14)
 
         ax.set_xticks(range(len(CONTEXT_LENGTHS)))
-        ax.set_xticklabels([str(v) for v in CONTEXT_LENGTHS], rotation=45, ha="right")
+        ax.set_xticklabels([str(v) for v in CONTEXT_LENGTHS], rotation=45, ha="right", fontsize=10)
+        if row == 1:
+            ax.set_xlabel("Context Length", fontsize=12)
+
         ax.set_yticks(range(len(DEPTHS)))
-        ax.set_yticklabels([str(v) for v in DEPTHS])
+        ax.set_yticklabels([str(v) for v in DEPTHS], fontsize=10)
+        if col == 0:
+            ax.set_ylabel("Depth Percent", fontsize=12)
+
         ax.grid(False)
         for spine in ax.spines.values():
             spine.set_visible(False)
 
-    colorbar = fig.colorbar(images[0], ax=axes.tolist(), shrink=0.9, pad=0.02)
-    colorbar.set_label("Recall", fontsize=12)
-    fig.suptitle("Needle-in-Haystack: Llama-3.1-8B, 5% KV size", fontsize=22, fontweight="bold")
+    # colorbar = fig.colorbar(images[0], ax=axes.tolist(), shrink=0.9, pad=0.02)
+    # colorbar.set_label("Recall", fontsize=12)
+    # fig.suptitle("Needle-in-Haystack: Llama-3.1-8B, 5% KV size", fontsize=22, fontweight="bold")
 
-    fig.savefig(OUTPUT_PATH, dpi=300, bbox_inches="tight")
+    fig.savefig(OUTPUT_PATH, bbox_inches="tight")
     plt.close(fig)
     return OUTPUT_PATH
 

@@ -4,7 +4,14 @@ Plot comparison of KV cache compression methods.
 Edit the data below and run: python plot_comparison.py
 """
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+mpl.rcParams.update({
+    "text.usetex": True,
+    "font.family": "serif",
+    "font.serif": ["Latin Modern Roman"],
+})
 
 # =============================================================================
 # EDIT YOUR DATA HERE
@@ -12,6 +19,16 @@ import matplotlib.pyplot as plt
 
 # Format: { "Method Name": { compression_ratio: score, ... }, ... }
 DATA = {
+    r"KV$^2$": { # with kvsquared_2
+        0.0: 92.9,
+        0.25: 92.9,
+        0.5: 93.13,
+        0.75: 90.97,
+        0.9: 75.52,
+        0.95: 69.13,
+        0.98: 64.93,
+        0.99: 57.79,
+    },
     "KVzip": {
         0.0: 92.9,
         0.25: 93.01,
@@ -22,16 +39,7 @@ DATA = {
         0.98: 18.47,
         0.99: 17.6
     },
-    "KV²": { # with kvsquared_2
-        0.0: 92.9,
-        0.25: 92.9,
-        0.5: 93.13,
-        0.75: 90.97,
-        0.9: 75.52,
-        0.95: 69.13,
-        0.98: 64.93,
-        0.99: 57.79,
-    },
+    
     # "KV² 3+": { # with kvsquared_3+
     #     0.0: 92.9,
     #     0.25: 92.9,
@@ -68,14 +76,14 @@ DATA = {
 
 TITLE = "RULER 16k - Qwen3-8B"
 XLABEL = "Compression Ratio"
-YLABEL = "Score (%)"
+YLABEL = "Score"
 FIGSIZE = (10, 6)
-OUTPUT_FILE = "RULER_16k.png"  # Set to None to only display, not save
+OUTPUT_FILE = "ruler_16k.pdf"  # Set to None to only display, not save
 
 COLORS = {
     "KVzip": "#E74C3C",             # Red
-    "KV²": "#4A90D9",      # Blue
-    "KV² 3+": "#1B3A6B",      # Dark Blue
+    r"KV$^2$": "#4A90D9",      # Blue
+    r"KV$^2$ 3+": "#1B3A6B",  # Dark Blue
     "KeyDiff": "#000000",           # Black
     "Expected Attention": "#9B59B6", # Purple
 }
@@ -89,7 +97,7 @@ def plot_comparison():
     # Collect all unique compression ratios across methods and assign equidistant positions
     all_ratios = sorted({r for scores in DATA.values() for r in scores})
     ratio_to_pos = {r: i for i, r in enumerate(all_ratios)}
-    tick_labels = [f"{int(r * 100)}%" for r in all_ratios]
+    tick_labels = [str(r) for r in all_ratios]
 
     plt.figure(figsize=FIGSIZE)
 
@@ -114,8 +122,8 @@ def plot_comparison():
 
     plt.xlabel(XLABEL, fontsize=12)
     plt.ylabel(YLABEL, fontsize=12)
-    plt.title(TITLE, fontsize=14, fontweight="bold")
-    plt.legend(loc="best", fontsize=10)
+    plt.title(TITLE, fontsize=14)
+    plt.legend(loc="best", fontsize=12)
     plt.grid(True, alpha=0.3)
 
     ax = plt.gca()
@@ -128,7 +136,7 @@ def plot_comparison():
     plt.tight_layout()
 
     if OUTPUT_FILE:
-        plt.savefig(OUTPUT_FILE, dpi=150, bbox_inches="tight")
+        plt.savefig(OUTPUT_FILE, bbox_inches="tight")
         print(f"Saved plot to: {OUTPUT_FILE}")
 
     plt.show()
