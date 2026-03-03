@@ -17,12 +17,14 @@ mpl.rcParams.update({
 
 chunk_sizes = ["0.5k", "1k", "2k", "4k", "8k", "16k", "32k", "64k", "128k"]
 
-# Compute times ("OOM" = out of memory, 0.0 = method not applicable)
-KVZIP_TIMES        = [89, 76, 68, 71, 96, "OOM", "OOM", "OOM", "OOM"]
-KV2_05_TIMES       = [56,  47,  43,  44,  46, 53, "OOM", "OOM", "OOM"]
-KV2_002_TIMES      = [42,  32,  26,  24,  23,   24,   24,   24,   25]
-KV2_002_2IT_TIMES  = [62,  42,  32,  28,  26,   25,   26,   27,   32]
-KV2_002_5IT_TIMES  = [130,  77,  50,  40,  36,   36,   40,   48,   72]
+# Peak memory in GB ("OOM" = out of memory, 0.0 = method not applicable)
+KVZIP_MEM        = [33.40, 33.37,  33.91,  37.57,  51.42, "OOM", "OOM", "OOM", "OOM"]
+KV2_05_MEM       = [33.36,  33.39,  33.46,  34.43,  39.68,  59.94, "OOM", "OOM", "OOM"]
+KV2_002_MEM      = [33.33,  33.33,  33.34,  33.34,  33.35,   33.37,   35.42,   44.02,   73.40]
+KV2_002_2IT_MEM  = [33.40,  33.40,  33.40,  33.41,  33.42,   33.44,   35.49,   44.09,   73.49]
+KV2_002_5IT_MEM  = [33.59,  33.59,  33.59,  33.60,  33.61,   33.63,   35.68,   44.30,   73.75]
+
+SETTLED_MEM = 32.37  # GB — model + KV cache after prefill (baseline before compression runs)
 
 # Colors (muted for thesis style)
 C_KVZIP   = "#E07B6A"   # Muted red
@@ -31,10 +33,9 @@ C_KV2_002 = "#5BAD7A"   # Muted green
 C_2IT     = "#1A7A3C"   # Deeper forest green
 C_5IT     = "#002D14"   # Very dark green
 
-FILL_ALPHA = 0.75       # Less transparent for cleaner look
-
+FILL_ALPHA = 0.75
 BAR_WIDTH  = 0.25
-BAR_GAP    = 0.0        # no gap between adjacent bars
+BAR_GAP    = 0.0
 FIGSIZE    = (9, 5)
 
 # =============================================================================
@@ -60,16 +61,16 @@ def draw_bar(ax, x, offset, data, fill_color, label):
            edgecolor="white", linewidth=0.5, label=label)
 
 
-def finish_ax(ax, ylim=150, sizes=None):
+def finish_ax(ax, ylim=80, sizes=None):
     if sizes is None:
         sizes = chunk_sizes
     x = np.arange(len(sizes))
     ax.set_xticks(x)
     ax.set_xticklabels(sizes, fontsize=10)
     ax.set_xlabel("Chunk size", fontsize=12)
-    ax.set_ylabel("Compute time (s)", fontsize=12)
+    ax.set_ylabel("Peak memory (GB)", fontsize=12)
     ax.set_ylim(0, ylim)
-    ax.axhline(y=19, color="black", linestyle=":", linewidth=1.5, label="_nolegend_")
+    ax.axhline(y=SETTLED_MEM, color="black", linestyle=":", linewidth=1.5, label="_nolegend_")
     ax.yaxis.grid(True, linestyle="--", alpha=0.3, color="#aaaaaa")
     ax.set_axisbelow(True)
     ax.spines["top"].set_visible(False)
@@ -86,9 +87,9 @@ def finish_ax(ax, ylim=150, sizes=None):
 
 def plot_comparison():
     x = np.arange(len(chunk_sizes))
-    d1, _ = process(KVZIP_TIMES)
-    d2, _ = process(KV2_05_TIMES)
-    d3, _ = process(KV2_002_TIMES)
+    d1, _ = process(KVZIP_MEM)
+    d2, _ = process(KV2_05_MEM)
+    d3, _ = process(KV2_002_MEM)
 
     fig, ax = plt.subplots(figsize=FIGSIZE)
 
@@ -97,9 +98,9 @@ def plot_comparison():
     draw_bar(ax, x,  0,    d2, C_KV2_05,  label=r"KV$^2$ (0.5)")
     draw_bar(ax, x, +step, d3, C_KV2_002, label=r"KV$^2$ (0.02)")
 
-    finish_ax(ax, ylim=110)
-    plt.savefig("chunk_size.pdf", bbox_inches="tight")
-    print("Saved: chunk_size.pdf")
+    finish_ax(ax, ylim=80)
+    plt.savefig("chunk_size_memory.pdf", bbox_inches="tight")
+    print("Saved: chunk_size_memory.pdf")
     plt.show()
 
 
@@ -108,11 +109,12 @@ def plot_comparison():
 # =============================================================================
 
 def plot_iterative():
-    sizes = chunk_sizes
+    start = chunk_sizes.index("4k")
+    sizes = chunk_sizes[start:]
     x = np.arange(len(sizes))
-    d3, _  = process(KV2_002_TIMES)
-    d4, _  = process(KV2_002_2IT_TIMES)
-    d5, _  = process(KV2_002_5IT_TIMES)
+    d3, _ = process(KV2_002_MEM[start:])
+    d4, _ = process(KV2_002_2IT_MEM[start:])
+    d5, _ = process(KV2_002_5IT_MEM[start:])
 
     fig, ax = plt.subplots(figsize=FIGSIZE)
 
@@ -121,9 +123,9 @@ def plot_iterative():
     draw_bar(ax, x,  0,    d4, C_2IT,     label=r"KV$^2$ (2$\times$)")
     draw_bar(ax, x, +step, d5, C_5IT,     label=r"KV$^2$ (5$\times$)")
 
-    finish_ax(ax, ylim=140, sizes=sizes)
-    plt.savefig("chunk_size_iter.pdf", bbox_inches="tight")
-    print("Saved: chunk_size_iter.pdf")
+    finish_ax(ax, ylim=80, sizes=sizes)
+    plt.savefig("chunk_size_memory_iter.pdf", bbox_inches="tight")
+    print("Saved: chunk_size_memory_iter.pdf")
     plt.show()
 
 
@@ -132,16 +134,3 @@ def plot_iterative():
 if __name__ == "__main__":
     plot_comparison()
     plot_iterative()
-
-
-# For KVzip specifically, this is what the measurement captures:
-# After the initial prefill (where all 124k tokens are processed and the full KV cache is in memory at 32.37 GB), KVzip runs a second phase: it feeds chunks of the original context back through the model again ("repeat the previous context") to compute importance scores for each KV pair. These reconstruction forward passes are what the chunk_size parameter controls.
-# During each reconstruction forward pass:
-# The full KV cache is still in memory (32.37 GB settled — model weights + all stored KV pairs)
-# On top of that, attention computations for the chunk are computed, needing temporary tensors proportional to chunk_size × context_length
-# So:
-# 32.37 GB = baseline = model weights + full KV cache sitting in memory while compression runs
-# +1.54 GB overhead = peak extra memory during the reconstruction forward pass for that chunk size
-# 33.91 GB total = the actual peak the GPU sees during the KVzip compression phase
-# For the caption you could write something like:
-# > Peak GPU memory during KVzip's context reconstruction phase as a function of chunk size. The dotted line (32.37 GB) marks the memory occupied by model weights and the full KV cache before compression. The overhead above the baseline reflects temporary attention tensors allocated during each reconstruction forward pass, which scale with chunk size.
