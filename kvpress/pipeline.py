@@ -214,13 +214,30 @@ class KVPressTextGenerationPipeline(Pipeline):
         perform_prefill_compression = press is not None and not isinstance(press, DecodingPress)
         with press(self.model) if perform_prefill_compression else contextlib.nullcontext():
             # We run the model without the lm head for pre-filling.
+            if torch.cuda.is_available():
+                torch.cuda.synchronize()
+                torch.cuda.reset_peak_memory_stats()
             self.model.model(
                 input_ids=context_ids,
                 past_key_values=cache,
             )
+            if torch.cuda.is_available():
+                torch.cuda.synchronize()
+                self.last_prefill_settled_gb = torch.cuda.memory_allocated() / 1e9
+                torch.cuda.reset_peak_memory_stats()
 
             logger.debug(f"Context Length: {context_length}")
             logger.debug(f"Compressed Context Length: {cache.get_seq_length()}")
+
+        # After the `with press(model)` block exits, the compression algorithm has finished
+        # (e.g. KVzip reconstruction forward passes, KV² scoring). Measure the peak during that phase.
+        if torch.cuda.is_available() and perform_prefill_compression:
+            torch.cuda.synchronize()
+            self.last_compression_peak_gb = torch.cuda.max_memory_allocated() / 1e9
+            logger.info(
+                f"Compression memory — peak during compression algorithm: {self.last_compression_peak_gb:.2f} GB  "
+                f"(overhead above settled: {self.last_compression_peak_gb - self.last_prefill_settled_gb:.2f} GB)"
+            )
 
         # We only perform decoding compression if the press is a decoding or prefill decoding press
         perform_decoding_compression = press is not None and isinstance(press, (DecodingPress, PrefillDecodingPress))

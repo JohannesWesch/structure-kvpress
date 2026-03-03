@@ -324,6 +324,11 @@ class EvaluationRunner:
             df = df.sample(frac=fraction, random_state=self.config.seed)
             logger.info(f"Sampled {len(df)} samples ({fraction:.2f}) from original {original_len} samples.")
 
+        # TEMP: Filter to only the 124k token sample (2nd sample, index 1)
+        df = df.iloc[[3]]
+        context_tokens = len(self.pipeline.tokenizer.encode(df.iloc[0]["context"]))
+        logger.info(f"TEMP FILTER: Running only sample index 3 ({context_tokens} tokens)")
+
         # if we have needle in a haystack, we need to insert it in the context
         if self.config.dataset == "needle_in_haystack":
             df = insert_needle_in_haystack(
@@ -425,6 +430,7 @@ class EvaluationRunner:
                     max_new_tokens=max_new_tokens,
                     max_context_length=self.config.max_context_length,
                 )
+
                 self.df.loc[index, "predicted_answer"] = output["answer"]  # type: ignore[union-attr]
                 torch.cuda.empty_cache()  # Clear CUDA cache to free up memory
 
@@ -461,6 +467,7 @@ class EvaluationRunner:
                     max_new_tokens=max_new_tokens,
                     max_context_length=self.config.max_context_length,
                 )
+
                 self.df.loc[df_group.index, "predicted_answer"] = output["answers"]  # type: ignore[union-attr]
                 # Store the actual compression ratio used (if the press has one)
                 self.df.loc[df_group.index, "compression_ratio"] = (
