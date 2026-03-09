@@ -46,7 +46,7 @@ class KVSquaredPress(KVzipPress):
         Per-chunk fraction of tokens selected as reconstruction queries.
     """
 
-    chunk_size: int = 16384
+    chunk_size: int = 4096
     inner_press: ScorerPress | KVSquaredPress = field(default_factory=lambda: KeyDiffPress())
     top_ratio: float = None
 
