@@ -28,10 +28,8 @@ DATA_DIRS=(
   "passkey"
   "kv_retrieval"
   "number_string"
-  "code_run"
   "code_debug"
   "math_find"
-  "math_calc"
   "longbook_qa_eng"
   "longbook_qa_chn"
   "longbook_choice_eng"
@@ -39,12 +37,40 @@ DATA_DIRS=(
 )
 
 NUM_GPUS=$(nvidia-smi --list-gpus | wc -l)
-job_idx=0
+
+declare -a GPU_PIDS
+for ((i=0; i<NUM_GPUS; i++)); do
+  GPU_PIDS[$i]=0
+done
+
+wait_for_gpu() {
+  local gpu_id=$1
+  local pid=${GPU_PIDS[$gpu_id]}
+  if [[ $pid -ne 0 ]]; then
+    wait "$pid"
+  fi
+}
+
+assign_gpu() {
+  while true; do
+    for ((i=0; i<NUM_GPUS; i++)); do
+      local pid=${GPU_PIDS[$i]}
+      if [[ $pid -eq 0 ]] || ! kill -0 "$pid" 2>/dev/null; then
+        if [[ $pid -ne 0 ]]; then
+          wait "$pid"
+        fi
+        echo "$i"
+        return
+      fi
+    done
+    sleep 2
+  done
+}
 
 for data_dir in "${DATA_DIRS[@]}"; do
   for ratio in "${COMPRESSION_RATIOS[@]}"; do
     for press in "${PRESS_NAMES[@]}"; do
-      gpu_id=$((job_idx % NUM_GPUS))
+      gpu_id=$(assign_gpu)
       echo "Running press_name: $press, compression_ratio: $ratio, data_dir: $data_dir on GPU cuda:$gpu_id"
       (
         cd evaluation && python evaluate.py \
@@ -56,11 +82,7 @@ for data_dir in "${DATA_DIRS[@]}"; do
           --fraction "$FRACTION" \
           --device "cuda:$gpu_id"
       ) > "$LOG_DIR/${press}_${ratio}_${data_dir}.out" 2> "$LOG_DIR/${press}_${ratio}_${data_dir}.err" &
-
-      job_idx=$((job_idx + 1))
-      if (( job_idx % NUM_GPUS == 0 )); then
-        wait
-      fi
+      GPU_PIDS[$gpu_id]=$!
     done
   done
 done
