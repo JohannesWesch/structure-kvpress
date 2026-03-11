@@ -9,6 +9,8 @@ import re
 import string
 from collections import Counter
 
+import numpy as np
+
 from tqdm import tqdm
 
 
@@ -168,7 +170,9 @@ def get_score_one_code_run(pred, label, model_name: str) -> bool:
     """
     Returns the score of one example in Code.Run.
     """
-    if isinstance(label, list):
+    if isinstance(label, np.ndarray):
+        label = label.item()
+    elif isinstance(label, list):
         label = label[0]
     pred = pred.strip()
     for c in ["\n", ".", "`", "'", '"', ":"]:
@@ -187,9 +191,15 @@ def get_score_one_code_debug(pred, label, model_name: str) -> bool:
     """
     Returns the score of one example in Code.Debug.
     """
+    if isinstance(label, np.ndarray):
+        label = label.tolist()
     pred = pred.strip()
-    label_c = label[1]
-    fn_name = label[0]
+    if len(label) >= 2:
+        label_c = label[1]
+        fn_name = label[0]
+    else:
+        label_c = label[0]
+        fn_name = None
     pattern = r"\b[A-J]\b(?!.*\b[A-J]\b)"
     match = re.search(pattern, pred)
     if match:
@@ -209,7 +219,8 @@ def get_score_one_code_debug(pred, label, model_name: str) -> bool:
         pred = pred.replace(c, " ")
     while "  " in pred:
         pred = pred.replace("  ", " ")
-    if pred.startswith(label_c) or pred.startswith(fn_name):
+    candidates = [s for s in [label_c, fn_name] if s is not None]
+    if any(pred.startswith(s) for s in candidates):
         return True
     for prefix in ans_prefixes:
         idx = pred.find(prefix)
@@ -219,26 +230,25 @@ def get_score_one_code_debug(pred, label, model_name: str) -> bool:
         if len(pred) < idx + len(prefix) + 1:
             return False
         pred = pred[idx + len(prefix) + 1 :]
-        for s in [label_c, fn_name]:
-            if pred.startswith(s):
-                return True
+        if any(pred.startswith(s) for s in candidates):
+            return True
         return False
     return False
 
 
 def get_score_one_math_find(pred, label, model_name: str) -> bool:
-    if isinstance(label, list):
+    if isinstance(label, (list, np.ndarray)):
         # In math_find, there is always only one label.
-        label = label[0]
+        label = label[0] if isinstance(label, list) else label.item()
+    if isinstance(label, str):
+        label = float(label) if "." in label else int(label)
     if isinstance(label, int):
-        # Find first int or float
         first_num = re.search(r"\d+\.\d+|\d+", pred)
         if first_num is None:
             return False
         first_num = first_num.group(0).strip()
         return int(first_num) == label
     elif isinstance(label, float):
-        # Find first float or int
         first_float = re.search(r"\d+\.\d+|\d+", pred)
         if first_float is None:
             return False
@@ -314,6 +324,8 @@ def get_score_one_longbook_qa_chn(pred, label, model_name: str) -> float:
 
 
 def get_score_one_math_calc(pred, label, model_name: str) -> float:
+    if isinstance(label, np.ndarray):
+        label = label.tolist()
     assert isinstance(label, list), f"Expected list, got {type(label)}"
     # assert isinstance(pred, list), f"Expected list, got {type(pred)}"
     if isinstance(label[0], list):
