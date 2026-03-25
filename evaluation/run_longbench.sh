@@ -17,7 +17,7 @@ module load devel/cuda/12.8
 
 source .venv/bin/activate
 
-MODEL="meta-llama/Meta-Llama-3.1-8B-Instruct"
+MODEL="Qwen/Qwen3-8B"
 DATASET="longbench"
 FRACTION=1.0
 
@@ -29,6 +29,25 @@ NUM_GPUS=$(nvidia-smi --list-gpus | wc -l)
 job_idx=0
 
 for data_dir in "${DATA_DIRS[@]}"; do
+  # Run no_press baseline (compression_ratio is overridden to 0.0 internally)
+  gpu_id=$((job_idx % NUM_GPUS))
+  echo "Running no_press baseline, data_dir: $data_dir on GPU cuda:$gpu_id"
+  (
+    cd evaluation && python evaluate.py \
+      --press_name "no_press" \
+      --compression_ratio 0.0 \
+      --model "$MODEL" \
+      --dataset "$DATASET" \
+      --data_dir "$data_dir" \
+      --fraction "$FRACTION" \
+      --device "cuda:$gpu_id"
+  ) > "$LOG_DIR/no_press_0.0_${data_dir}.out" 2> "$LOG_DIR/no_press_0.0_${data_dir}.err" &
+
+  job_idx=$((job_idx + 1))
+  if (( job_idx % NUM_GPUS == 0 )); then
+    wait
+  fi
+
   for ratio in "${COMPRESSION_RATIOS[@]}"; do
     for press in "${PRESS_NAMES[@]}"; do
       gpu_id=$((job_idx % NUM_GPUS))

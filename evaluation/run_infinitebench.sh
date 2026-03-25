@@ -17,9 +17,11 @@ module load devel/cuda/12.8
 
 source .venv/bin/activate
 
-MODEL="meta-llama/Meta-Llama-3.1-8B-Instruct"
+MODEL="Qwen/Qwen2.5-7B-Instruct-1M"
 DATASET="infinitebench"
 FRACTION=0.1
+CONTINUE_ON_INFERENCE_ERROR="True"
+MAX_CONTEXT_TOKENS_TO_ATTEMPT=700000
 
 PRESS_NAMES=("kvsquared" "kvzip" "keydiff")
 COMPRESSION_RATIOS=(0.9 0.95 0.98)
@@ -68,6 +70,23 @@ assign_gpu() {
 }
 
 for data_dir in "${DATA_DIRS[@]}"; do
+  # Run no_press baseline (compression_ratio is overridden to 0.0 internally)
+  gpu_id=$(assign_gpu)
+  echo "Running no_press baseline, data_dir: $data_dir on GPU cuda:$gpu_id"
+  (
+    cd evaluation && python evaluate.py \
+      --press_name "no_press" \
+      --compression_ratio 0.0 \
+      --model "$MODEL" \
+      --dataset "$DATASET" \
+      --data_dir "$data_dir" \
+      --fraction "$FRACTION" \
+      --max_context_tokens_to_attempt "$MAX_CONTEXT_TOKENS_TO_ATTEMPT" \
+      --continue_on_inference_error "$CONTINUE_ON_INFERENCE_ERROR" \
+      --device "cuda:$gpu_id"
+  ) > "$LOG_DIR/no_press_0.0_${data_dir}.out" 2> "$LOG_DIR/no_press_0.0_${data_dir}.err" &
+  GPU_PIDS[$gpu_id]=$!
+
   for ratio in "${COMPRESSION_RATIOS[@]}"; do
     for press in "${PRESS_NAMES[@]}"; do
       gpu_id=$(assign_gpu)
@@ -80,6 +99,8 @@ for data_dir in "${DATA_DIRS[@]}"; do
           --dataset "$DATASET" \
           --data_dir "$data_dir" \
           --fraction "$FRACTION" \
+          --max_context_tokens_to_attempt "$MAX_CONTEXT_TOKENS_TO_ATTEMPT" \
+          --continue_on_inference_error "$CONTINUE_ON_INFERENCE_ERROR" \
           --device "cuda:$gpu_id"
       ) > "$LOG_DIR/${press}_${ratio}_${data_dir}.out" 2> "$LOG_DIR/${press}_${ratio}_${data_dir}.err" &
       GPU_PIDS[$gpu_id]=$!
