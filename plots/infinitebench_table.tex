@@ -25,219 +25,204 @@
 
 \begin{table}[htbp]
 \centering
-\caption{InfiniteBench benchmark results with 2\% and 5\% KV cache sizes.}
+\caption{InfiniteBench benchmark results with 2\%, 5\% and 10\% KV cache sizes.}
 \label{tab:infinitebench_results}
 \small
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.2}
 
-\begin{tabular}{l|ccc|cccc|c|cc|cc|c}
+\begin{tabular}{l|ccc|cccc|c|c|c}
 \toprule
 \multirow{2}{*}{\textbf{Method}} 
     & \multicolumn{3}{c|}{\textbf{Retrieval}}
     & \multicolumn{4}{c|}{\textbf{QA}} 
-    & \multicolumn{1}{c|}{\textbf{Sum}}
-    & \multicolumn{2}{c|}{\textbf{Code}}
-    & \multicolumn{2}{c|}{\textbf{Math}}
+    & \textbf{Code}
+    & \textbf{Math}
     & \multirow{2}{*}{\textbf{Avg.}} \\
-\cmidrule(lr){2-4} \cmidrule(lr){5-8} \cmidrule(lr){9-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13}
+\cmidrule(lr){2-4} \cmidrule(lr){5-8} \cmidrule(lr){9-9} \cmidrule(lr){10-10}
     & Passkey & KV-Ret & NumStr 
     & QA-Eng & QA-Chn & Choice & Dialog 
-    & Sum
-    & Debug & Run
-    & Calc & Find
+    & Debug
+    & Find
     & \\
-\midrule
-
-%% ============================================================
-%% Qwen3-8B
-%% ============================================================
-\multicolumn{14}{c}{\textbf{Qwen3-8B}} \\
-\midrule
-
-Full 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-\midrule
-\multicolumn{14}{c}{\textit{KV Size = 2\%}} \\
-\midrule
-
-KeyDiff 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVzip 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVsquared(KeyDiff 0.2) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVsquared+(2 Iterations) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-\midrule
-\multicolumn{14}{c}{\textit{KV Size = 5\%}} \\
-\midrule
-
-KeyDiff 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVzip 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVsquared(KeyDiff 0.5) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVsquared+(2 Iterations) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
 \midrule
 
 %% ============================================================
 %% Llama-3-8B-Instruct
 %% ============================================================
-\multicolumn{14}{c}{\textbf{Llama-3-8B-Instruct}} \\
+\multicolumn{11}{c}{\textbf{Llama-3.1-8B-Instruct}} \\
 \midrule
 
 Full 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
+    & 99.15 & 60.00 & 99.66
+    & 25.92 & 31.95 & 69.43 & 21.50
+    & 16.75
+    & 24.29
+    & 49.85 \\
 
 \midrule
-\multicolumn{14}{c}{\textit{KV Size = 2\%}} \\
-\midrule
-
-KeyDiff 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVzip 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVsquared(KeyDiff 0.2) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVsquared+(2 Iterations) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-KVsquared+(5 Iterations) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
-
-\midrule
-\multicolumn{14}{c}{\textit{KV Size = 5\%}} \\
+\multicolumn{11}{c}{\textit{KV Size = 2\%}} \\
 \midrule
 
 KeyDiff 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
+    & 81.36 & \textbf{0.00} & 74.58
+    & 14.38 & 3.86 & 21.74 & 5.00
+    & \textbf{33.33}
+    & 37.14
+    & 30.16 \\
 
 KVzip 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
+    & \textbf{100.00} & \textbf{0.00} & 88.14
+    & 9.78 & 2.00 & \textbf{34.78} & 0.00
+    & \textbf{33.33}
+    & 37.14
+    & 33.91 \\
 
-KVsquared(KeyDiff 0.5) 
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
+KV$^2$
+    & \textbf{100.00} & \textbf{0.00} & \textbf{98.31}
+    & \textbf{16.28} & \textbf{11.78} & \textbf{34.78} & \textbf{10.00}
+    & \textbf{33.33}
+    & \textbf{42.86}
+    & \textbf{38.59} \\
 
-KVsquared+(2 Iterations)  
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
+\midrule
+\multicolumn{11}{c}{\textit{KV Size = 5\%}} \\
+\midrule
 
-KVsquared+(5 Iterations)  
-    & 0.00 & 0.00 & 0.00
-    & 0.00 & 0.00 & 0.00 & 0.00
-    & 0.00
-    & 0.00 & 0.00
-    & 0.00 & 0.00
-    & 0.00 \\
+KeyDiff 
+    & \textbf{100.00} & \textbf{0.00} & 84.75
+    & \textbf{25.31} & 6.52 & \textbf{43.48} & \textbf{10.00}
+    & \textbf{38.46}
+    & 20.00
+    & 36.50 \\
+
+KVzip 
+    & \textbf{100.00} & \textbf{0.00} & 96.61
+    & 14.52 & 5.99 & 34.78 & \textbf{10.00}
+    & 30.77
+    & 34.29
+    & 36.33 \\
+
+KV$^2$
+    & \textbf{100.00} & \textbf{0.00} & \textbf{100.00}
+    & 14.81 & \textbf{12.10} & \textbf{43.48} & \textbf{10.00}
+    & 30.77
+    & \textbf{40.00}
+    & \textbf{39.02} \\
+
+\midrule
+\multicolumn{11}{c}{\textit{KV Size = 10\%}} \\
+\midrule
+
+KeyDiff 
+    & \textbf{100.00} & \textbf{0.00} & 93.22
+    & \textbf{26.37} & \textbf{12.26} & 43.48 & 5.00
+    & 33.33
+    & 17.14
+    & 36.76 \\
+
+KVzip 
+    & \textbf{100.00} & \textbf{0.00} & \textbf{100.00}
+    & 14.06 & 4.43 & 52.17 & \textbf{25.00}
+    & \textbf{41.03}
+    & 20.00
+    & 39.63 \\
+
+KV$^2$
+    & \textbf{100.00} & \textbf{0.00} & \textbf{100.00}
+    & 24.34 & 7.74 & \textbf{56.52} & 15.00
+    & 35.90
+    & \textbf{37.14}
+    & \textbf{41.85} \\
+
+\midrule
+%% ============================================================
+%% Qwen3-8B
+%% ============================================================
+\multicolumn{11}{c}{\textbf{Qwen3-8B}} \\
+\midrule
+
+Full
+    & 100.00 & 0.00 & 69.49
+    & 3.94 & 1.20 & 17.39 & 0.00
+    & 23.08
+    & 20.00
+    & 26.12 \\
+
+\midrule
+\multicolumn{11}{c}{\textit{KV Size = 2\%}} \\
+\midrule
+
+KeyDiff
+    & 6.78 & \textbf{0.00} & 0.00
+    & 0.45 & 1.97 & 4.35 & \textbf{0.00}
+    & 10.26
+    & 17.14
+    & 4.55 \\
+
+KVzip
+    & 81.36 & \textbf{0.00} & \textbf{62.71}
+    & \textbf{3.32} & \textbf{2.86} & 13.04 & \textbf{0.00}
+    & 15.38
+    & 22.86
+    & 22.39 \\
+
+KV$^2$
+    & \textbf{86.44} & \textbf{0.00} & 47.46
+    & 3.26 & 0.93 & \textbf{17.39} & \textbf{0.00}
+    & \textbf{20.51}
+    & \textbf{25.71}
+    & \textbf{22.41} \\
+
+\midrule
+\multicolumn{11}{c}{\textit{KV Size = 5\%}} \\
+\midrule
+
+KeyDiff
+    & 20.34 & \textbf{0.00} & 11.86
+    & 2.09 & 0.90 & 8.70 & 0.00
+    & 17.95
+    & \textbf{31.43}
+    & 10.36 \\
+
+KVzip
+    & 88.14 & \textbf{0.00} & \textbf{55.93}
+    & 2.97 & \textbf{1.58} & \textbf{30.43} & 0.00
+    & 12.82
+    & 22.86
+    & 23.86 \\
+
+KV$^2$
+    & \textbf{94.92} & \textbf{0.00} & 47.46
+    & \textbf{3.02} & 1.02 & 17.39 & \textbf{5.00}
+    & \textbf{20.51}
+    & 25.71
+    & \textbf{23.89} \\
+
+\midrule
+\multicolumn{11}{c}{\textit{KV Size = 10\%}} \\
+\midrule
+
+KeyDiff
+    & 16.95 & \textbf{0.00} & 30.51
+    & 1.71 & 0.73 & 17.39 & 0.00
+    & \textbf{25.64}
+    & \textbf{28.57}
+    & 13.50 \\
+
+KVzip
+    & 89.83 & \textbf{0.00} & 44.07
+    & 3.17 & 0.96 & \textbf{26.09} & 0.00
+    & 20.51
+    & 22.86
+    & 23.05 \\
+
+KV$^2$
+    & \textbf{96.61} & \textbf{0.00} & \textbf{71.19}
+    & \textbf{3.90} & \textbf{2.97} & 17.39 & \textbf{5.00}
+    & 20.51
+    & 22.86
+    & \textbf{26.71} \\
 
 \bottomrule
 \end{tabular}
@@ -256,8 +241,6 @@ KVsquared+(5 Iterations)
 %% Dialog   -> longdialogue_qa_eng
 %% Sum      -> longbook_sum_eng
 %% Debug    -> code_debug
-%% Run      -> code_run
-%% Calc     -> math_calc
 %% Find     -> math_find
 %% ============================================================
 
