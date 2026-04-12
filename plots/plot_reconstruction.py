@@ -118,18 +118,19 @@ def plot_model(data, full_score, title, output_file):
             label=kv_size,
             color=color,
             marker=marker,
-            markersize=8,
-            linewidth=2,
+            markersize=12,
+            linewidth=3.5,
         )
     
     # Add baseline (no compression) horizontal dotted line
     plt.axhline(y=full_score, color='gray', linestyle='--', linewidth=1.5, label='Full KV cache')
     
-    plt.xlabel(XLABEL, fontsize=12)
-    plt.ylabel(YLABEL, fontsize=12)
-    plt.title(title, fontsize=14)
-    plt.legend(loc="best", fontsize=10)
+    plt.xlabel(XLABEL, fontsize=28)
+    plt.ylabel(YLABEL, fontsize=28)
+    plt.title(title, fontsize=30)
+    plt.legend(loc="best", fontsize=22)
     plt.grid(True, alpha=0.3)
+    plt.tick_params(axis="both", labelsize=22)
     
     # Format x-axis as percentages
     ax = plt.gca()

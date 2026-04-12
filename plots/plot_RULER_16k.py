@@ -118,21 +118,22 @@ def plot_comparison():
             label=method_name,
             color=color,
             marker="o",
-            markersize=8,
-            linewidth=2,
+            markersize=12,
+            linewidth=3.5,
         )
 
     plt.axhline(y=93.01, color='gray', linestyle='--', linewidth=1.5, label='No compression')
 
-    plt.xlabel(XLABEL, fontsize=12)
-    plt.ylabel(YLABEL, fontsize=12)
-    plt.title(TITLE, fontsize=14)
-    plt.legend(loc="best", fontsize=12)
+    plt.xlabel(XLABEL, fontsize=28)
+    plt.ylabel(YLABEL, fontsize=28)
+    plt.title(TITLE, fontsize=30)
+    plt.legend(loc="best", fontsize=22)
     plt.grid(True, alpha=0.3)
 
     ax = plt.gca()
     ax.set_xticks(range(len(all_ratios)))
-    ax.set_xticklabels(tick_labels)
+    ax.set_xticklabels(tick_labels, fontsize=22)
+    ax.tick_params(axis="y", labelsize=22)
 
     plt.xlim(0, len(all_ratios) - 0.5)
     plt.ylim(0, 100)

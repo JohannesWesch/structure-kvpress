@@ -66,9 +66,9 @@ def finish_ax(ax, ylim=80, sizes=None):
         sizes = chunk_sizes
     x = np.arange(len(sizes))
     ax.set_xticks(x)
-    ax.set_xticklabels(sizes, fontsize=10)
-    ax.set_xlabel("Chunk size", fontsize=12)
-    ax.set_ylabel("Peak memory (GB)", fontsize=12)
+    ax.set_xticklabels(sizes, fontsize=22)
+    ax.set_xlabel("Chunk size", fontsize=28)
+    ax.set_ylabel("Peak memory (GB)", fontsize=28)
     ax.set_ylim(0, ylim)
     ax.axhline(y=SETTLED_MEM, color="black", linestyle=":", linewidth=1.5, label="_nolegend_")
     ax.yaxis.grid(True, linestyle="--", alpha=0.3, color="#aaaaaa")
@@ -77,7 +77,8 @@ def finish_ax(ax, ylim=80, sizes=None):
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_linewidth(0.8)
     ax.spines["bottom"].set_linewidth(0.8)
-    ax.legend(loc="upper center", fontsize=10, ncol=4,
+    ax.tick_params(axis="y", labelsize=22)
+    ax.legend(loc="upper center", fontsize=22, ncol=4,
               frameon=True, framealpha=0.9, edgecolor="#cccccc")
     plt.tight_layout()
 
@@ -98,7 +99,7 @@ def plot_comparison():
     draw_bar(ax, x,  0,    d2, C_KV2_05,  label=r"KV$^2$ (0.5)")
     draw_bar(ax, x, +step, d3, C_KV2_002, label=r"KV$^2$ (0.02)")
 
-    finish_ax(ax, ylim=80)
+    finish_ax(ax, ylim=95)
     plt.savefig("chunk_size_memory.pdf", bbox_inches="tight")
     print("Saved: chunk_size_memory.pdf")
     plt.show()
@@ -118,11 +119,11 @@ def plot_iterative():
     fig, ax = plt.subplots(figsize=FIGSIZE)
 
     step = BAR_WIDTH + BAR_GAP
-    draw_bar(ax, x, -step, d3, C_KV2_002, label=r"KV$^2$ (1$\times$)")
+    draw_bar(ax, x, -step, d3, C_KV2_002, label=r"KV$^2$")
     draw_bar(ax, x,  0,    d4, C_2IT,     label=r"KV$^2$ (2$\times$)")
     draw_bar(ax, x, +step, d5, C_5IT,     label=r"KV$^2$ (5$\times$)")
 
-    finish_ax(ax, ylim=80, sizes=sizes)
+    finish_ax(ax, ylim=95, sizes=sizes)
     plt.savefig("chunk_size_memory_iter.pdf", bbox_inches="tight")
     print("Saved: chunk_size_memory_iter.pdf")
     plt.show()

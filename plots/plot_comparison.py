@@ -104,18 +104,19 @@ def plot_comparison():
             label=method_name,
             color=color,
             marker=marker,
-            markersize=8,
-            linewidth=2,
+            markersize=12,
+            linewidth=3.5,
         )
     
     # Add baseline (no compression) horizontal dotted line
     plt.axhline(y=95.7, color='gray', linestyle='--', linewidth=1.5, label='No compression')
     
-    plt.xlabel(XLABEL, fontsize=12)
-    plt.ylabel(YLABEL, fontsize=12)
-    plt.title(TITLE, fontsize=14, fontweight="bold")
-    plt.legend(loc="best", fontsize=10)
+    plt.xlabel(XLABEL, fontsize=28)
+    plt.ylabel(YLABEL, fontsize=28)
+    plt.title(TITLE, fontsize=30, fontweight="bold")
+    plt.legend(loc="best", fontsize=22)
     plt.grid(True, alpha=0.3)
+    plt.tick_params(axis="both", labelsize=22)
     
     # Format x-axis as percentages (e.g., 50%, 75%)
     ax = plt.gca()

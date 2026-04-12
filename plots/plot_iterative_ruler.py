@@ -46,6 +46,7 @@ FULL_SCORE = 95.61  # Full KV cache baseline (Llama-3.1-8B-Instruct)
 # =============================================================================
 
 FIGSIZE = (10, 6)
+TITLE = "RULER 4k - Llama-3.1-8B-Instruct"
 XLABEL = "Iterations"
 YLABEL = "Score"
 
@@ -62,7 +63,7 @@ COLOR_KD_10PCT = "#E8922E"
 def main():
     plt.figure(figsize=FIGSIZE)
 
-    mk = dict(marker="o", markersize=8, linewidth=2)
+    mk = dict(marker="o", markersize=12, linewidth=3.5)
 
     # Random 2% — blue
     plt.plot(ITERATIONS, KV2_PLUS_RAND_2PCT, label=r"KV$^2$+ Random (2\%)",
@@ -90,18 +91,15 @@ def main():
 
     # plt.axhline(y=91.22, color="gray", linestyle="--", linewidth=1.5, label="Oracle")
 
-    plt.xlabel(XLABEL, fontsize=12)
-    plt.ylabel(YLABEL, fontsize=12)
-    # plt.title(
-    #     "RULER-4k: Self-Refinement Steps (Llama-3.1-8B-Instruct, 2% KV Cache)",
-    #     fontsize=14,
-    #     fontweight="bold",
-    # )
-    plt.legend(loc="lower right", fontsize=12)
+    plt.xlabel(XLABEL, fontsize=28)
+    plt.ylabel(YLABEL, fontsize=28)
+    plt.title(TITLE, fontsize=30, fontweight="bold")
+    plt.legend(loc="lower right", fontsize=22)
     plt.grid(True, alpha=0.3)
     plt.xlim(0.5, 5.5)
     plt.ylim(0, 70)
     plt.xticks(ITERATIONS)
+    plt.tick_params(axis="both", labelsize=22)
 
     plt.tight_layout()
     plt.savefig("ruler_iterative.pdf", bbox_inches="tight")
