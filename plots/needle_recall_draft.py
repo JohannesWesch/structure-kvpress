@@ -131,10 +131,9 @@ def plot_heatmaps() -> Path:
             (0.0,  "#d93a54"),
             (0.1, "#eb6e5a"),
             (0.2,  "#f0a05a"),
-            (0.3,  "#e8c84a"),
-            # (0.4, "#9dd870"),
-            (0.4,  "#48c78e"),
-            (0.5,  "#2abb7f"),
+            (0.4,  "#e8c84a"),
+            (0.6, "#9dd870"),
+            (0.8,  "#48c78e"),
             (1.0,  "#2abb7f"),
         ],
         N=256,
@@ -177,8 +176,8 @@ def plot_heatmaps() -> Path:
         for spine in ax.spines.values():
             spine.set_visible(False)
 
-    # colorbar = fig.colorbar(images[0], ax=axes.tolist(), shrink=0.6, pad=0.02)
-    # colorbar.set_label("Recall (ROUGE-2)", fontsize=12)
+    colorbar = fig.colorbar(images[0], ax=axes.tolist(), shrink=0.6, pad=0.02)
+    colorbar.set_label("Recall (ROUGE-2)", fontsize=12)
     fig.suptitle("NIAH - Llama-3.1-8B-Instruct", fontsize=14)
 
     fig.savefig(OUTPUT_PATH, bbox_inches="tight")

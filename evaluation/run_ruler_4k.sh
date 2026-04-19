@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=kvpress-ruler-16k
+#SBATCH --job-name=kvpress-ruler-4k
 #SBATCH --partition=gpu_h100_il
 #SBATCH --mem=510000mb
 #SBATCH --time=48:00:00
@@ -19,11 +19,12 @@ source .venv/bin/activate
 
 MODEL="meta-llama/Meta-Llama-3.1-8B-Instruct"
 DATASET="ruler"
-DATA_DIR="16384"
+DATA_DIR="4096"
 FRACTION=1.0
 
-PRESS_NAMES=("kvsquared" "kvzip" "keydiff" "expected_attention")
-COMPRESSION_RATIOS=(0.25 0.5 0.75 0.9 0.95 0.98 0.99 0.995)
+# KVSquaredPress with different inner_press scorers (see evaluate_registry.py).
+PRESS_NAMES=("kvsquared_knorm" "kvsquared_cur" "kvsquared_random" "kvsquared_keydiff" "kvsquared_streaming_llm")
+COMPRESSION_RATIOS=(0.9 0.95 0.98)
 
 NUM_GPUS=$(nvidia-smi --list-gpus | wc -l)
 
